@@ -1,0 +1,161 @@
+-include ../make.inc
+.NOTPARALLEL:
+	
+SOURCEDIRS=	\
+	../../src/src_xs/ \
+	../../src/src_fermisurfdx/ \
+	../../src/src_iterative_solver/ \
+	../../src/src_iterative_solver/src_diis/ \
+	../../src/src_mixing/ \
+	../../src/src_phonon/ \
+	../../src/src_optics/ \
+	../../src/src_LDAU/ \
+	../../src/src_rdmft/ \
+	../../src/src_lib/ \
+	../../src/src_advanced/ \
+	../../src/src_eigensystem/ \
+	../../src/src_mpi/ \
+	../../src/src_xc/ \
+	../../src/src_xml/ \
+	../../src/src_inputparser/ \
+	../../src/src_sym/ \
+	../../src/src_gw/ \
+	../../src/src_gw/src_acfreq/ \
+	../../src/src_hybrids/ \
+        ../../src/src_raman/ \
+	../../src/src_stm/ \
+	../../src/src_vdW/ \
+	../../src/ \
+	
+GeneratedFiles=  ../../src/src_inputparser/inputmodules.f90 ../../src/src_inputparser/speciesmodules.f90	
+LIBXCMOD= ../../src/libXC/src/libxc.f90  ../../src/libXC/src/libxc_funcs.f90
+
+#all:bin
+
+bin::../make.inc libs $(GeneratedFiles)  $(LIBXCMOD)
+	perl ../../build/utilities/versionstamp.pl  
+	../../build/utilities/mkmf -t ./template -f -m Makefile.mkmf -p exciting \
+	$(SOURCEDIRS)  $(LIBXCMOD)	../../src/mainxml/ \
+	&& $(MAKE) -f Makefile.mkmf exciting \
+	&& cp exciting ../../bin/exciting$(SUFFIX)
+	
+	
+doc::
+	cd ./docs/exciting; \
+	perl ../../build/utilities/scripts/genprotexdoc.pl ../../src/mainxml/  $(SOURCEDIRS)  ;\
+	mv doc.pdf excitingsubroutines.pdf
+
+tidy::
+	perl ../../build/utilities/scripts/prettyprint.pl $(SOURCEDIRS)
+
+ifeq ($(USE_SYS_LAPACK),true)
+libs::  libbzint.a fftlib.a libarpack.a libmsec.a libfox leblaiklib.a libxc.a liblbfgs.a
+endif
+
+ifeq ($(USE_SYS_LAPACK),)
+libs::  libbzint.a libblas.a liblapack.a fftlib.a libarpack.a libmsec.a \
+	libfox leblaiklib.a libxc.a liblbfgs.a
+endif
+
+libblas.a:: 
+	../../build/utilities/mkmf -t ./template.f77 -f -m Makefile.blas -p libblas.a \
+	../../src/BLAS\
+	&& $(MAKE) -f Makefile.blas libblas.a 
+	
+
+liblapack.a:: 
+	../../build/utilities/mkmf -t ./template.f77 -f -m Makefile.lapack -p liblapack.a \
+	../../src/LAPACK\
+	&& $(MAKE) -f Makefile.lapack liblapack.a 
+	
+fftlib.a::
+	../../build/utilities/mkmf -t ./template -f -m Makefile.fft -p fftlib.a \
+	../../src/fftlib\
+	&& $(MAKE) -f Makefile.fft fftlib.a 
+
+libbzint.a:: 
+	../../build/utilities/mkmf -t ./template -f -m Makefile.libbzint -p libbzint.a \
+	../../src/libbzint\
+	&& $(MAKE) -f Makefile.libbzint libbzint.a 
+
+libmsec.a:: 
+	../../build/utilities/mkmf -t ./template.f77 -f -m Makefile.libmsec -p libmsec.a \
+	../../src/src_mixing/lib/ \
+	&& $(MAKE) -f Makefile.libmsec libmsec.a 
+
+libarpack.a::
+	../../build/utilities/mkmf -t ./template.f77 -f -m Makefile.libarpack -p libarpack.a \
+	../../src/ARPACK/SRC/ \
+	../../src/ARPACK/UTIL/ \
+	&& $(MAKE) -f Makefile.libarpack libarpack.a
+
+libfox:lib/libFoX_common.a
+
+ifeq ($(HLRN),true)
+lib/libFoX_common.a:
+	cd ../../src/FoX/ && \
+	module swap craype-$(CNODE_ARCH) craype-$(LNODE_ARCH) && \
+	./configure FC=$(F90) && \
+	module swap craype-$(LNODE_ARCH) craype-$(CNODE_ARCH) && \
+	make 
+	cp -r ../../src/FoX/objs/* ./
+else
+lib/libFoX_common.a:
+	cd ../../src/FoX/ && \
+	./configure FC=$(F90) &&\
+	make 
+	cp -r ../../src/FoX/objs/* ./
+endif
+	
+leblaiklib.a::
+	cd ../../src/leblaiklib && make
+	cp ../../src/leblaiklib/leblaiklib.a ./
+
+liblbfgs.a::
+	cd ../../src/Lbfgsb.3.0 && make
+	cp ../../src/Lbfgsb.3.0/liblbfgs.a ./
+	
+libxc.a:lib/libxc.a
+
+ifeq ($(HLRN),true)
+lib/libxc.a: 
+	cd ../../src/libXC/ && \
+	module swap craype-$(CNODE_ARCH) craype-$(LNODE_ARCH) && \
+	./configure FC=$(F90) FCFLAGS="$(CPP_ON_OPT)" CC=$(CC) FCCPP=$(FCCPP) --enable-static=yes --enable-shared=no &&\
+	module swap craype-$(LNODE_ARCH) craype-$(CNODE_ARCH) && \
+	make 
+	cp -r ../../src/libXC/src/.libs/libxc.a ./lib/libxc.a
+else
+lib/libxc.a: 
+	cd ../../src/libXC/ && \
+	./configure FC=$(F90) FCFLAGS="$(CPP_ON_OPT)" CC=$(CC) FCCPP=$(FCCPP) --enable-static=yes --enable-shared=no &&\
+	make 
+	cp -r ../../src/libXC/src/.libs/libxc.a ./lib/libxc.a
+endif
+
+#cp -f ../make.inc ../..
+#cd ../../src/ARPACK && $(MAKE) clean 
+#cp ../../src/ARPACK/libarpack.a .
+#cd ../../src/ARPACK && $(MAKE) clean
+
+../../xml/excitinginput.xsd: ../../xml/schema/*.xsd  ../../xml/schema/schemaexpand.xsl
+	xsltproc ../../xml/schema/schemaexpand.xsl ../../xml/schema/input.xsd > ../../xml/excitinginput.xsd
+	
+
+../../src/src_inputparser/inputmodules.f90:   ../../xml/excitinginput.xsd ../../xml/schematofortran.xsl
+	xsltproc ../../xml/schematofortran.xsl   ../../xml/excitinginput.xsd > ../../src/src_inputparser/inputmodules.f90
+
+../../src/src_inputparser/speciesmodules.f90:   ../../xml/species.xsd ../../xml/schematofortran.xsl
+	xsltproc  ../../xml/schematofortran.xsl  ../../xml/species.xsd > ../../src/src_inputparser/speciesmodules.f90
+
+
+clean:
+	rm -f *.o *.mod *.f90 *.F90 exciting
+
+cleanlibs:
+	rm -f *.a
+	rm -rf lib finclude
+	-cd ../../src/libXC/ && make clean
+	-cd ../../src/FoX && make clean
+	-cd ../../src/leblaiklib && make clean
+	-cd ../../src/Lbfgsb.3.0 && make clean

@@ -1,0 +1,825 @@
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ex="http://xml.exciting-code.org/inputschemaextentions.xsd"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xsi:schemaLocation="http://xml.exciting-code.org/inputschemaextentions.xsd    http://xml.exciting-code.org/inputschemaextentions.xsd">
+  <xs:include id="common" schemaLocation="common.xsd"/>
+  <xs:annotation>
+    <xs:appinfo>
+      <parent>/input</parent>
+      <root>properties</root>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element ex:importance="essential" ex:unit="" name="properties">
+    <xs:annotation>
+      <xs:documentation> Properties listed in this element can be calculated from the groundstate.
+        It works also from a saved state from a previous run. </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:all>
+        <xs:element ex:importance="essential" ex:unit="" name="bandstructure" maxOccurs="1"
+          minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>If present a banstructure is calculated.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:annotation>
+              <xs:documentation>Create a bandstructure. Must contain plot1d element for
+                bandstructure path.</xs:documentation>
+            </xs:annotation>
+            <xs:all>
+              <xs:element ex:importance="essential" ex:unit="" ref="plot1d"/>
+            </xs:all>
+            <xs:attribute ex:importance="essential" ex:unit="Hartree" ref="scissor" default="0.0d0">
+              <xs:annotation>
+                <xs:documentation>Value to shift bandgap.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="character" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>Band structure plot which includes angular momentum characters for
+                  every atom.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="stm" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+	      <xs:element ex:importance="essential" ex:unit="" name="region" maxOccurs="1" minOccurs="0">
+		<xs:complexType>
+		  <xs:attribute ex:importance="expert" ex:unit="Bohr" name="height" default="0.0d0" type="fortrandouble">
+		    <xs:annotation>
+		      <xs:documentation>Height (z-coordinate) of the STM tip in Bohr radius, measured from the absolute origin of the unit cell as 
+		      defined in the structure element. Assumes the surface is in xy plane.</xs:documentation>
+		    </xs:annotation>
+		  </xs:attribute>
+		  <xs:attribute ex:importance="essential" ex:unit="" name="grid2d" default="10 10" type="integerpair">
+		    <xs:annotation>
+		      <xs:documentation>Number of grid points along first and second unit cell vectors, respectively.</xs:documentation>
+		    </xs:annotation>
+		  </xs:attribute>
+	  	  <xs:attribute ex:importance="expert" ex:unit="Bohr" name="zrange" default="0.0 0.0" type="vect2d">
+		    <xs:annotation>
+		      <xs:documentation>Pair of floats giving the minimum and maximum z coordinate of the volumetric 
+		      region for sampling the differential-conductance or integrated-LDOS in topographic mode.</xs:documentation>
+		    </xs:annotation>
+		  </xs:attribute>
+		  <xs:attribute ex:importance="essential" ex:unit="" name="grid3d" default="10 10 10" type="integertriple">
+		    <xs:annotation>
+		      <xs:documentation>Number of grid points along first and second unit cell vectors and along the segment between zmin and zmax along the third cell vector.</xs:documentation>
+		    </xs:annotation>
+		  </xs:attribute>
+		</xs:complexType>
+	      </xs:element>
+            </xs:all>
+            <xs:attribute ex:importance="expert" ex:unit="Hartree" name="bias" default="0.0d0" type="fortrandouble">
+              <xs:annotation>
+                <xs:documentation>Value of the STM bias voltage in Hartree. A positive value gives an empty states STM image while a negative bias gives a filled states images.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="stmtype" default="differentialConductance">
+              <xs:annotation>
+                <xs:documentation>Specifies the type of STM calculation.
+		<list>
+		  <li> differentialConductance (default): calculation of the LDOS at an energy Ef+bias. </li>
+		  <li> integratedLDOS: integrates the LDOS in the range [Ef,Ef+bias] for positive bias and in the range [Ef+bias, Ef] for negative bias.</li>
+		</list>
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+		<xs:restriction base="xs:string">
+            	  <xs:enumeration value="differentialConductance">
+            	  </xs:enumeration>
+            	  <xs:enumeration value="integratedLDOS">
+            	  </xs:enumeration>
+          	</xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="stmmode" default="constantHeight">
+              <xs:annotation>
+                <xs:documentation>Specifies the STM mode of operation to be simulated.
+		<list>
+		  <li> constantHeight (default): Calculates the property defined in the "stmtype" attribute on a two-dimensional mesh defined by the plot2d element. </li>
+		  <li> topographic: (to be implemented) Calculates the iso-surface of the property defined in the "stmtype" attribute.</li>
+		</list>
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+		<xs:restriction base="xs:string">
+            	  <xs:enumeration value="constantHeight">
+            	  </xs:enumeration>
+            	  <xs:enumeration value="topographic">
+            	  </xs:enumeration>
+          	</xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="wfplot" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Wavefunction plot.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:annotation>
+              <xs:documentation>Plot the wave function at a set of kpoints</xs:documentation>
+            </xs:annotation>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="kstlist" minOccurs="1">
+                <xs:annotation>
+                  <xs:documentation><inlinemath>{\mathbf k}</inlinemath>-point and state index for which the wave function should be
+                    plotted.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot1d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="essential" ex:unit="" name="dos" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation> If present a DOS calculation is started. <p/> DOS and optics plots
+              require integrals of the kind
+                <displaymath>g(\omega_i)=\frac{\Omega}{(2\pi)^3}\int_{\rm BZ} f({ \bf k})
+                \delta(\omega_i-e({\bf k}))d{ \bf k}.</displaymath> These are calculated by first
+              interpolating the functions <inlinemath>e({ \bf k})</inlinemath> and <inlinemath>f({
+                \bf k})</inlinemath> with the trilinear method on a much finer mesh whose size is
+              determined by <attref>ngrdos</attref>. Then the <inlinemath>\omega</inlinemath>-dependent
+              histogram of the integrand is accumulated over the fine mesh. If the output function
+              is noisy then either <attref>ngrdos</attref> should be increased or <attref>nwdos</attref>
+              decreased. Alternatively, the output function can be artificially smoothed up to a
+              level given by <attref>nsmdos</attref>. This is the number of successive 3-point averages to
+              be applied to the function <inlinemath>g</inlinemath>. </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="sqados"
+              default="0.0d0 0.0d0 1.0d0" type="vect3d">
+              <xs:annotation>
+                <xs:documentation> Spin-quantization axis in Cartesian coordinates used when
+                  plotting the spin-resolved DOS (z-axis by default). </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="lmirep" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> When lmirep is set to <pre>"true"</pre>, the spherical harmonic
+                  basis is transformed into one in which the site symmetries are block diagonal.
+                  Band characters determined from the density matrix expressed in this basis
+                  correspond to irreducible representations, and allow the partial DOS to be
+                  resolved into physically relevant contributions, for example eg and t2g.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" ref="nwdos" default="500"> </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" ref="ngrdos" default="100"> </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" ref="nsmdos" default="0"  > 
+              <xs:annotation>
+                <xs:documentation>This attribute indicates the type of smearing for the resulting DOS. In particular, the value 0 means no smearing at all, 1 that a three nearest point averaging is performed, 2 that two such consecutive averagings are done, etc. 
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="Hartree" name="winddos"
+              default="-0.5d0 0.5d0" type="vect2d">
+              <xs:annotation>
+                <xs:documentation>Frequency/energy window for the DOS or optics
+                  plot.</xs:documentation>
+                <xs:appinfo>
+                  <oldname>wdos</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="Hartree" ref="scissor" default="0.0d0"/>
+            <xs:attribute ex:importance="expert" ex:unit="" name="jdos" type="xs:boolean" default="false"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="LSJ" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Output L, S and J expectation values.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="kstlist" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation> List of <inlinemath>{ \bf k}</inlinemath>-point and state
+                    pairs. Referenced by their index. </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="masstensor" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation> Compute the effective mass tensor at the <inlinemath>{\mathbf k}</inlinemath>-point given by
+              vklem. </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="deltaem" type="fortrandouble"
+              default="0.025d0">
+              <xs:annotation>
+                <xs:documentation> The size of the <inlinemath>{\mathbf k}</inlinemath>-vector displacement used when calculating
+                  numerical derivatives for the effective mass tensor. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="ndspem" type="xs:integer"
+              default="1">
+              <xs:annotation>
+                <xs:documentation> The number of <inlinemath>{\mathbf k}</inlinemath>-vector displacements in each direction around
+                  vklem when computing the numerical derivatives for the effective mass
+                  tensor.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="vklem" type="vect3d"
+              default="0.0d0 0.0d0 0.0d0">
+              <xs:annotation>
+                <xs:documentation>The <inlinemath>{\mathbf k}</inlinemath>-point in lattice coordinates at which to compute the
+                  effective mass tensors.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="essential" ex:unit="" name="chargedensityplot" maxOccurs="1"
+          minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Plot the charge density</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="essential" ex:unit="" ref="plot1d" minOccurs="0"/>
+              <xs:element ex:importance="essential" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="essential" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+            <xs:attribute name="nocore" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  Visualize only the density of valence electrons.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="essential" ex:unit="" name="TSvdW" maxOccurs="1"
+          minOccurs="0">
+          <xs:annotation>
+            <xs:documentation> If the subelement <elementref>TSvdW</elementref> is specified inside the element <elementref>properties</elementref>, the <bf>TS-vdW</bf> method (find reference here: <attref>vdWcorrection</attref>) for van-der-Waals correction to the total energy is used. The energy correction is written to a file called <pre>TSvdW.OUT</pre>. Since this method makes use of the electron density of the specific system under investigation, the <bf>TS-vdW</bf> correction can only be obtained in combination with a standard DFT ground-state calculation. In case you skip the ground-state calculation (<attref>do</attref>=<pre>"skip"</pre>), you should make sure that a <pre>STATE.OUT</pre>-file from a previous calculation is contained in your working directory. The electron density will then be read in from this file. If you are interested in changing any of the <bf>TS-vdW</bf> parameters, you can use the element <elementref>TSvdWparameters</elementref> to do so.
+	    </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="essential" ex:unit="" name="DFTD2" maxOccurs="1"
+          minOccurs="0">
+          <xs:annotation>
+            <xs:documentation> If the subelement <elementref>DFTD2</elementref> is specified inside the element <elementref>properties</elementref>, the <bf>DFT-D2</bf> method (find reference here: <attref>vdWcorrection</attref>) for van-der-Waals correction to the total energy is used. The energy correction is written to a file called <pre>DFTD2.OUT</pre>. It is not necessary to perform a ground-state calculation, so you could choose <attref>do</attref>=<pre>"skip"</pre> and only calculate the van-der-Waals correction. Only the input file <pre>input.xml</pre> with the declaration of the structure of interest must be provided. If you are interested in changing any of the <bf>DFT-D2</bf> parameters, you can use the element <elementref>DFTD2parameters</elementref> to do so.
+	    </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="exccplot" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Exchange-correlation and Coulomb potential plots.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot1d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="elfplot" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Electron localization function (ELF).</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot1d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="mvecfield" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Plot of magnetization vector field.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="xcmvecfield" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Plot of exchange-correlation magnetic vector field.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="electricfield" minOccurs="0"
+          maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Writes the electric field to file.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="gradmvecfield" maxOccurs="1"
+          minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Plot of he gradient of the magnetic vector field.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot1d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="essential" ex:unit="" name="fermisurfaceplot" maxOccurs="1"
+          minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Writes Fermi surface data to file.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="essential" ex:unit="" ref="plot2d" minOccurs="0"/>
+              <xs:element ex:importance="essential" ex:unit="" ref="plot3d" minOccurs="0"/>
+            </xs:all>
+            <xs:attribute ex:importance="essential" ex:unit="" name="nstfsp" type="xs:integer"
+              default="6">
+              <xs:annotation>
+                <xs:documentation>Number of states to be included in the Fermi surface plot
+                  file.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="EFG" maxOccurs="1" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Calculation of electric field gradient (EFG), contact
+              charge.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="mossbauer" minOccurs="0">
+          <xs:complexType/>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="expiqr" minOccurs="0">
+          <xs:complexType>
+            <xs:annotation>
+              <xs:documentation>Write out matrix elements of plane wave for given list of <inlinemath>{\mathbf k}</inlinemath>-points
+                and states</xs:documentation>
+            </xs:annotation>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" ref="kstlist" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation><inlinemath>{\mathbf k}</inlinemath>-point list (all states are considered) for which the matrix
+                    elements are written out.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="elnes" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="vecql" type="vect3d" default="0.0d0 0.0d0 0.0d0">
+              <xs:annotation>
+                <xs:documentation>Gives the q-vector in lattice coordinates for calculating ELNES.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="wgrid" type="xs:integer" default="100">
+              <xs:annotation>
+                <xs:documentation>Number of grid points inside [wmin,wmax] interval.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="wmin" type="fortrandouble" default="0.0">
+              <xs:annotation>
+                <xs:documentation>Lower energy limit.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="wmax" type="fortrandouble" default="0.5">
+              <xs:annotation>
+                <xs:documentation>Upper energy limit.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="ngrid" type="xs:integer" default="100"> </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="eliashberg" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="mustar" type="fortrandouble"
+              default="0.15d0">
+              <xs:annotation>
+                <xs:documentation>Coulomb pseudopotential, <inlinemath>\mu*</inlinemath>, used in the McMillan-Allen-Dynes
+                  equation.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <xs:element ex:importance="expert" ex:unit="" name="momentummatrix" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Generate matrix elements of the momentum operator and store them in PMAT.OUT.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" ref="fastpmat" default="true">
+              <xs:annotation>
+                <xs:documentation>apply generalised DFT correction of L. Fritsche and Y. M. Gu,
+                  Phys. Rev. B 48, 4250 (1993)</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="dielmat" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              Calculate the dielectric tensor in IP-RPA (without local-field effect) for q=0.
+            </xs:documentation>
+          </xs:annotation>          
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ex:importance="expert" ex:unit="" name="epscomp" type="integerpair" minOccurs="0" maxOccurs="9">
+                <xs:annotation>
+                  <xs:documentation>Components of the dielectric tensor to be calculated.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            
+            <xs:attribute ex:importance="essential" ex:unit="" name="wmax" type="fortrandouble" default="0.30">
+              <xs:annotation>
+                <xs:documentation>Upper energy limit for the dielectric matrix calculations.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="essential" ex:unit="" name="wgrid" type="xs:integer" default="400">
+              <xs:annotation>
+                <xs:documentation>Number of grid points inside [0,wmax] interval.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="swidth" type="fortrandouble" default="0.01d0">
+              <xs:annotation>
+                <xs:documentation>Broadening factor to fit the experimental resolution.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="expert" ex:unit="" name="scissor" type="fortrandouble" default="0.0d0">
+              <xs:annotation>
+                <xs:documentation>Value of the "scissor" correction.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" ref="intraband" default="false">
+              <xs:annotation>
+                <xs:documentation> The intraband attribute is <pre>"true"</pre> if the intraband
+                  term is to be added to the optical matrix.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>            
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="drude" type="vect2d" default="0.0d0 0.0d0">
+              <xs:annotation>
+                  <xs:documentation>
+                  Parameters for the Drude term used for calculating the intraband contribution:
+                  First value determines the plasma frequency, second - the lifetime broadening.
+                  </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+          
+            <xs:attribute ex:importance="expert" ex:unit="" name="tevout" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation><pre>"true"</pre> if energy outputs are in eV.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>            
+
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="raman" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+               <xs:documentation>Compute first order Raman spectra.
+               </xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+               <xs:sequence>
+                    <xs:element ex:importance="expert" ex:unit="" name="eigvec" minOccurs="0" maxOccurs="unbounded">
+                      <xs:annotation>
+                        <xs:documentation>
+                        Input manually the eigenvector of a normal mode. Note: Not normalized eigenvectors are
+                        renormalized by <pre>exciting</pre>.
+                        </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="comp" type="vect2d" use="required">
+                          <xs:annotation>
+                            <xs:documentation>A component of the phonon eigenvector. The order of the given
+                            components must correspond to the order of the atoms given in <elementref>structure</elementref>,
+                            and consist of three times the element <elementref>eigvec</elementref> for each atom 
+                            (for <inlinemath>x</inlinemath>, <inlinemath>y</inlinemath> 
+                            and <inlinemath>z</inlinemath>). Each time specify two floating point numbers, which are
+                            the real and imaginary part of the component.
+                            </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element ex:importance="expert" ex:unit="" ref="energywindow" minOccurs="1" maxOccurs="1">
+                       <xs:annotation>
+                          <xs:documentation>Use this element to specify the energy range of the Raman spectrum in Ha.
+                          </xs:documentation>
+                       </xs:annotation>
+                    </xs:element>
+               </xs:sequence>
+
+               <xs:attribute ex:importance="expert" ex:unit="" name="getphonon" default="fromscratch">
+                    <xs:annotation>
+                        <xs:documentation>
+                        Prior to the calculation of Raman intensities, the normal coordinates of the phonon modes have to be
+                        ready. Four choices are available: <pre>fromscratch</pre> triggers a supercell phonon calculation for
+                        the <inlinemath>\Gamma</inlinemath>-point (i.e. the supercell is just the unit cell), note that the relevant attributes
+                        given with the element <elementref>phonons</elementref> will be overwritten by suitable values; <pre>fromfile</pre>
+                        reads the dynamical matrix from <pre>DYN_*.OUT</pre> files produced in a previous phonon calculation;
+                        <pre>readinput</pre> enables you to input a phonon eigenvector manually; and <pre>symvec</pre> constructs
+                        symmetry vectors from the crystal symmetries and uses them instead of eigenvectors (this is not generally
+                        meaningful, as the symmetry vectors are obtained as linear combinations of eigenvectors in case several phonon modes
+                        which belong to the same irreducible representation occur, so check the output carefully). 
+                        <pre>symveccheck</pre> solely produces the symmetry vectors and stops. 
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="fromscratch"/>
+                            <xs:enumeration value="fromfile"/>
+                            <xs:enumeration value="symvec"/>
+                            <xs:enumeration value="symveccheck"/>
+                            <xs:enumeration value="readinput"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="mode" type="xs:integer" default="0">
+                    <xs:annotation>
+                        <xs:documentation>Optionally choose a phonon mode to compute
+                        (<inlinemath>4 \leq </inlinemath><pre>mode</pre><inlinemath> \leq 3N_{\mathrm{atm}}</inlinemath>).
+                        The default of 0 means compute spectra of all Raman active modes present.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="nstate" type="xs:integer" default="5">
+                    <xs:annotation>
+                        <xs:documentation>Number of vibrational states to solve for.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="xmin" type="fortrandouble" default="-3.0d0">
+                    <xs:annotation>
+                        <xs:documentation>Lower boundary of the oscillator problem, give a distance along
+                                          the normal coordinate, <inlinemath>|{\bf u}_i |</inlinemath> in Bohr.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="xmax" type="fortrandouble" default="3.0d0">
+                    <xs:annotation>
+                        <xs:documentation>Upper boundary of the oscillator problem, give a distance along
+                                          the normal coordinate, <inlinemath>|{\bf u}_i |</inlinemath> in Bohr.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="ninter" type="xs:integer" default="500">
+                    <xs:annotation>
+                        <xs:documentation>Number of intervals in numerical (FE) solution of the oscillator problem.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="writefunc" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>If <pre>true</pre> output eigenfunctions of oscillator problem to files.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="nstep" type="xs:integer" default="5">
+                    <xs:annotation>
+                        <xs:documentation>Create <pre>nstep</pre> distorted geometries
+                        to sample the potential and dielectric function.
+                        The distortion is done by displacing atoms along normal coordinate by 
+                        <inlinemath>n*</inlinemath><attref>displ</attref> with 
+                        <inlinemath>-1/2</inlinemath><attref>nstep</attref><inlinemath>\le n\le 1/2</inlinemath><attref>nstep</attref>.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="displ" type="fortrandouble" default="0.02d0">
+                    <xs:annotation>
+                        <xs:documentation>Step length for each displacement along normal coordinate, <inlinemath>|{\bf u}_i |</inlinemath> in Bohr.
+                        For solids, a value of 0.01-0.02 times the number of atoms in the unit cell is often a good choice. In any case
+                        check the obtained potential and dielectric functions carefully.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="degree" type="xs:integer" default="2">
+                    <xs:annotation>
+                        <xs:documentation>Degree of fitting polynomial for the potential. The default of <inlinemath>2</inlinemath>
+                        results in a harmonic oscillator.
+                        For the dielectric function also a polynomial of degree <attref>degree</attref> is fitted, but
+                        only the first derivative used.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="molecule" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>
+                        If <pre>true</pre>, an isolated molecule is assumed and some additional output created. 
+                        The default of <pre>false</pre> means the
+                        calculation is done for the solid state limit.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="usesym" type="xs:boolean" default="true">
+                    <xs:annotation>
+                        <xs:documentation>
+                        Flag wether to use symmetry to analyze the Raman activity of phonon modes prior to
+                        running through all computation steps.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="useforces" type="xs:boolean" default="true">
+                    <xs:annotation>
+                        <xs:documentation>
+                        Request the use forces to fit the potential along normal coordinates (if set to <pre>true</pre>),
+                        otherwise the total energy will be used (if set to <pre>false</pre>).
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="expert" ex:unit="" name="doequilibrium" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>
+                        Specifiy whether the true equilibirum geometry should be included in the frozen phonon calculations.
+                        On one hand the symmetry of the equilibrium might be higher and the properties slightly changed; 
+                        on the other hand the same equilibrium structure is used for all active modes and thus some computer time
+                        can be saved. The default is <pre>false</pre>, which means that a close-to-equilibrium structure with the
+                        same symmetry as the mode is used. For every mode this is a slightly different structure.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="essential" ex:unit="" name="elaser" type="fortrandouble" default="0.0">
+                    <xs:annotation>
+                        <xs:documentation>Energy of the incident laser beam. Specify it in units of <attref>elaserunit</attref>
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="essential" ex:unit="" name="elaserunit" default="nm">
+                    <xs:annotation>
+                        <xs:documentation>Units of <pre>elaser</pre>: electron volts, photon wave length in nm, reciprocal centimeters
+                        or Hartree.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="eV"/>
+                            <xs:enumeration value="nm"/>
+                            <xs:enumeration value="cm-1"/>
+                            <xs:enumeration value="Ha"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+               </xs:attribute>
+               <xs:attribute ex:importance="essential" ex:unit="" name="broad" type="fortrandouble" default="10.0d0">
+                    <xs:annotation>
+                        <xs:documentation>Lorentzian broadening in cm<inlinemath>^{-1}</inlinemath> for simulation of experimental spectra.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+               <xs:attribute ex:importance="essential" ex:unit="" name="temp" type="fortrandouble" default="298.15">
+                    <xs:annotation>
+                        <xs:documentation>Temperature in K for which the Raman spectrum is computed. This affects the 
+                        occupation of vibrational states.
+                        </xs:documentation>
+                    </xs:annotation>
+               </xs:attribute>
+            </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="moke" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+
+            <xs:attribute ex:importance="expert" ex:unit="" ref="intraband" default="true">
+              <xs:annotation>
+                <xs:documentation> Use the intraband term in calculations if the dielectric matrix.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="essential" ex:unit="" name="wmax" type="fortrandouble" default="0.30">
+              <xs:annotation>
+                <xs:documentation>Upper energy limit for the Kerr angle calculation.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="essential" ex:unit="" name="wgrid" type="xs:integer" default="400">
+              <xs:annotation>
+                <xs:documentation>Number of grid points inside [0,wmax] interval.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="swidth" type="fortrandouble" default="0.01d0">
+              <xs:annotation>
+                <xs:documentation>Broadening factor.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="expert" ex:unit="" name="scissor" type="fortrandouble" default="0.0d0">
+              <xs:annotation>
+                <xs:documentation>Scissors operator.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="expert" ex:unit="" name="drude" type="vect2d" default="0.0d0 0.0d0">
+              <xs:annotation>
+                  <xs:documentation>
+                  Parameters for the Drude term used for calculating the intraband contribution:
+                  First value determines the plasma frequency, second - the lifetime broadening.
+                  </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="tevout" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation><pre>"true"</pre> if energy outputs are in eV.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+          </xs:complexType>
+        </xs:element>        
+
+        <xs:element ex:importance="expert" ex:unit="" name="shg" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ex:importance="expert" ex:unit="" name="chicomp" type="integertriple"
+                default="1 2 3" maxOccurs="27">
+                <xs:annotation>
+                  <xs:documentation>The components of the second-order optical tensor Chi(-2w,w,w) to
+                    be calculated.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            
+            <xs:attribute ex:importance="essential" ex:unit="" name="wmax" type="fortrandouble" default="0.3">
+              <xs:annotation>
+                <xs:documentation>Upper energy limit for SHG calculations.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="essential" ex:unit="" name="wgrid" type="xs:integer" default="400">
+              <xs:annotation>
+                <xs:documentation>Number of grid points inside [0,emax] interval.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="swidth" type="fortrandouble" default="0.01d0">
+              <xs:annotation>
+                <xs:documentation>Broadening factor.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="expert" ex:unit="" name="scissor" type="fortrandouble" default="0.0d0">
+              <xs:annotation>
+                <xs:documentation>Scissors operator.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+            <xs:attribute ex:importance="expert" ex:unit="" name="etol" type="fortrandouble" default="0.004d0">
+              <xs:annotation>
+                <xs:documentation>Tolerence factor (to avoid singularities).</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+         
+            <xs:attribute ex:importance="expert" ex:unit="" name="tevout" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation><pre>"true"</pre> if energy outputs are in eV.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+          </xs:complexType>
+        </xs:element>
+
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
