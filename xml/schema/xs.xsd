@@ -1,0 +1,1636 @@
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ex="http://xml.exciting-code.org/inputschemaextentions.xsd"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xsi:schemaLocation="http://xml.exciting-code.org/inputschemaextentions.xsd    http://xml.exciting-code.org/inputschemaextentions.xsd">
+  <xs:include id="common" schemaLocation="common.xsd"/>
+  <xs:annotation>
+    <xs:appinfo>
+      <parent>/input</parent>
+      <root>xs</root>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element ex:importance="expert" ex:unit="" name="xs">
+    <xs:annotation>
+      <xs:documentation> If this element is present with valid configuration, the macroscopic
+        dielectric function and related spectroscopic quantities in the linear regime are calculated
+        through either time-dependent DFT (TDDFT) or the Bethe-Salpeter equation
+        (BSE).</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:all>
+	<xs:element ex:importance="expert" ex:unit="" name="storeexcitons" minOccurs="0" maxOccurs="1">
+	  <xs:annotation>
+            <xs:documentation>When present this element allows to store the exciton components (BSE eigenvectors).
+	    The number of stored excitons starting from the lowest energy one is given by the attribute
+	    <attref>MaxNumberExcitons</attref>.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+	    <xs:attribute ex:importance="expert" ex:unit="" name="MinNumberExcitons" type="xs:integer"
+		    default="1">
+	      <xs:annotation>
+	        <xs:documentation>It represents the lower limit of the number of stored excitons.</xs:documentation>
+	      </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="MaxNumberExcitons" type="xs:integer"
+		    default="10">
+	      <xs:annotation>
+	        <xs:documentation>It represents the upper limit of the number of stored excitons.</xs:documentation>
+	      </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="writeexcitons" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>When present this element allows to write the stored exciton components (BSE eigenvectors) 
+            to ASCII files. The range of excitons must lie within the stored range given by the attributes in the 
+            element storeexcitons. 
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="MinNumberExcitons" type="xs:integer" default="1">
+              <xs:annotation>
+                <xs:documentation>It represents the lower limit of the number of written excitons.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="MaxNumberExcitons" type="xs:integer" default="10">
+              <xs:annotation>
+                <xs:documentation>It represents the upper limit of the number of written excitons.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+
+
+        <xs:element ex:importance="expert" ex:unit="" name="excitonPlot" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Parameters for the electron-hole visualization.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+
+              <xs:element ex:importance="expert" ex:unit="" name="exciton" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>Electron-hole pair descriptor.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute ex:importance="essential" ex:unit="" name="lambda" type="xs:integer" default="1">
+                    <xs:annotation>
+                    <xs:documentation>
+                      The index of the stored exciton.
+                    </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute ex:importance="essential" ex:unit="" name="fix" type="xs:string" default="hole">
+                    <xs:annotation>
+                    <xs:documentation>
+                      Fix position (in lattice coordinates) either of the "hole" or "electron".
+                    </xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element ex:importance="expert" ex:unit="" name="hole" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                <xs:documentation>
+                  For the exciton wavefunction visualization: Real space grid for the hole distribution.
+                </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                <xs:all>
+                  <xs:element ex:importance="expert" ex:unit="" ref="plot1d" minOccurs="0" maxOccurs="1"/>
+                  <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0" maxOccurs="1"/>
+                  <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0" maxOccurs="1"/>
+                </xs:all>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element ex:importance="expert" ex:unit="" name="electron" minOccurs="1" maxOccurs="1">
+                <xs:annotation>
+                <xs:documentation>
+                  For the exciton wavefunction visualization: Real space grid for the electron distribution.
+                </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                <xs:all>
+                  <xs:element ex:importance="expert" ex:unit="" ref="plot1d" minOccurs="0" maxOccurs="1"/>
+                  <xs:element ex:importance="expert" ex:unit="" ref="plot2d" minOccurs="0" maxOccurs="1"/>
+                  <xs:element ex:importance="expert" ex:unit="" ref="plot3d" minOccurs="0" maxOccurs="1"/>
+                </xs:all>
+                </xs:complexType>
+              </xs:element>
+
+            </xs:sequence>
+            
+            <xs:attribute ex:importance="expert" ex:unit="" name="epstol" type="fortrandouble" default="1.0d-4">
+              <xs:annotation>
+                <xs:documentation>Threshold value for selecting states which contribute to the exciton.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="expert" ex:unit="" name="tddft" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="ahc" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> By setting it to <pre>"true"</pre>, the anomalous Hall conductivity (AHC)
+                  term is included in the calculation of the dielectric tensor [see PRB 86, 125139 (2012)]. 
+		  In this case, the MOKE.OUT output file is generated, containing the MOKE spectrum. 
+		  This attribute only has effect when local field effects are neglected (gqmax=0) and q=0. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" ref="intraband" default="false">
+              <xs:annotation>
+                <xs:documentation> By setting it to <pre>"true"</pre>, the intraband
+                  contribution is included in the calculation for the finite q. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="drude" type="vect2d" default="0.0d0 0.0d0">
+              <xs:annotation>
+                  <xs:documentation>
+		    Parameters defining semiclassical Drude approximation to intraband term. The first
+		    value determines the plasma frequency <inlinemath>\omega_p</inlinemath> and the second the inverse relaxation time
+		    <inlinemath>\omega_{\tau}</inlinemath>:<inlinemath>\chi_0^D=\frac{1}{\omega}\frac{\omega_p^2}{\omega+i\omega_{\tau}}</inlinemath>
+                  </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="torddf" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> if to consider the time-ordered version
+                  of the dielectric function. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="tordfxc" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> if to consider the time-ordered version
+                  of xc kernel (MBPT derived kernels only). </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="aresdf" type="xs:boolean"
+              default="true">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> if to consider the anti-resonant part
+                  for the dielectric function. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="aresfxc" type="xs:boolean"
+              default="true">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> if to consider the anti-resonant part
+                  for the MBPT derived xc-kernels. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="Hartree" name="fxcbsesplit"
+              type="fortrandouble" default="1.0d-5">
+              <xs:annotation>
+                <xs:documentation>Split parameter for degeneracy in energy differences of MBPT
+                  derived xc kernels. See A. Marini, Phys. Rev. Lett., 91, (2003)
+                  256402.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="acont" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>Set to <pre>"true"</pre> if analytic continuation from the
+                  imaginary axis to the real axis is to be performed.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nwacont" type="xs:integer"
+              default="0">
+              <xs:annotation>
+                <xs:documentation>Number of energy intervals (on imaginary axis) for analytic
+                  continuation.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="lindhard" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> if Lindhard-like function is to be
+                  calculated. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="kerndiag" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> if only diagonal part of xc-kernel is to
+                  be used. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="lmaxalda" type="xs:integer"
+              default="3">
+              <xs:annotation>
+                <xs:documentation>Angular momentum cutoff for Rayleigh expansion of exponential
+                  factor for ALDA-kernel.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="alphalrc" type="fortrandouble"
+              default="0.0d0">
+              <xs:annotation>
+                <xs:documentation><inlinemath>\alpha</inlinemath>-parameter for the static long
+                  range contribution (LRC) model xc kernel.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="alphalrcdyn" type="fortrandouble"
+              default="0.0d0">
+              <xs:annotation>
+                <xs:documentation><inlinemath>\alpha</inlinemath>-parameter for the dynamical long
+                  range contribution (LRC) model xc kernel.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="betalrcdyn" type="fortrandouble"
+              fixed="0.0d0">
+              <xs:annotation>
+                <xs:documentation><inlinemath>\beta</inlinemath>-parameter for the dynamical long
+                  range contribution (LRC) model xc kernel.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="mdfqtype" type="xs:integer"
+              default="0">
+              <xs:annotation>
+                <xs:documentation> Treatment of macroscopic dielectric function for <inlinemath>{\bf
+                    Q}</inlinemath>-point outside of Brillouin zone. A value of 0 uses the full
+                    <inlinemath>{\bf Q}</inlinemath> and the <inlinemath>({\bf 0},{\bf
+                    0})</inlinemath> component of the microscopic dielectric matrix is used. A
+                  value of 1 invokes a decomposition <inlinemath>{\bf Q}={\bf q}+{\bf G}_{\bf
+                    q}</inlinemath> and the <inlinemath>({\bf Q}_{\bf q},{\bf Q}_{\bf
+                    q})</inlinemath> component of the microscopic dielectric matrix is used.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="fxctype" default="RPA">
+              <xs:annotation>
+                <xs:documentation>Defines which xc kernel is to be used. Examples on the use of the
+		different kernels can be found online on the Tutorial "TDDFT Calculations with Different Kernels"
+		on www.exciting-code.org.
+		In the options indicated below, if the suffix <pre>"_NLF"</pre> is present, then 
+		local-field effects are neglected (scalar kernel). Otherwise the kernel 
+		is a matrix of the size of the number of <inlinemath>\mathbf{G}</inlinemath>-vectors, 
+		whose diagonal elements are all equal. The available kernels <inlinemath>f_{xc}</inlinemath> are:
+		<list>
+		  <li><pre>"RPA"</pre> -
+		  Random-phase approximation kernel. <inlinemath>f_{xc}=0</inlinemath>
+		  </li>
+		  <li><pre>"LRCstatic[_NLF]"</pre> -
+		  Long-range correction kernel. 
+		  <displaymath>
+		    f_{xc}=-\frac{\alpha}{\mathbf{q}^2}.
+		  </displaymath>
+		  See S. Botti et al., Phys. Rev. B 69, 155112 (2004)
+		  </li>
+		  <li><pre>"LRCdyn[_NLF]"</pre> -
+		  Dynamical long-range correction kernel. 
+		  <displaymath>
+		    f_{xc}=-\frac{\alpha+\beta \omega^2}{\mathbf{q}^2}
+		  </displaymath>
+		  with <inlinemath>\alpha</inlinemath> given by the value of <attref>alphalrcdyn</attref>
+		  and <inlinemath>\beta</inlinemath> given by the value of <attref>betalrcdyn</attref>.
+		  See S. Botti et al., Phys. Rev. B 72, 125203 (2005)
+		  </li>
+		  <li><pre>"ALDA"</pre> -
+		  Adiabatic LDA kernel. 
+		  <displaymath>
+		    f_{xc}(\mathbf{r},\mathbf{r}',t-t')=\frac{\delta V_{xc}(\mathbf{r})}{\delta n(\mathbf{r}')}\delta(t-t').
+		  </displaymath>
+		  In this implementation, <inlinemath>V_{xc}(\mathbf{r})</inlinemath> is the spin-unpolarised 
+		  exchange-correlation potential corresponding to the Perdew-Wang parameterisation 
+		  of Ceperley-Alder's Monte-Carlo data (see Phys. Rev. B 45, 13244 (1992) and Phys. Rev. Lett. 45, 566 (1980)).
+		  </li>
+		  <li><pre>"MB1[_NLF]"</pre> -
+		  BSE derived xc kernel. See L. Reining et al., Phys. Rev. Lett. 88, 066404 (2002) 
+		  and A. Marini et al., Phys. Rev. Lett. 91, 256402 (2003).
+		  </li>
+		  <li><pre>"BO"</pre> -
+		  Bootstrap kernel.   
+		  <displaymath>
+		    f_{xc}=\frac{\varepsilon^{-1}(\omega=0)}{\chi_{00}(\omega=0)}.
+		  </displaymath>
+		  See S. Sharma et al., Phys. Rev. Lett. 107, 186401 (2011).
+		  </li>
+		  <li><pre>"BO_SCALAR"</pre> -
+		  Scalar version of the bootstrap kernel. <inlinemath>
+		    f_{xc}=\left[\varepsilon_M(\omega=0)\chi_{00}(\omega=0)\right]^{-1}
+		  </inlinemath>. See S. Sharma et al., Phys. Rev. Lett. 107, 186401 (2011).
+		  </li>
+		  <li><pre>"RBO"</pre> -
+		  RPA bootstrap kernel. <inlinemath>
+		    f_{xc}=\left[\varepsilon^{RPA}_M(\omega=0)\overline{\chi}_{00}^{RPA}(\omega=0)\right]^{-1}
+		  </inlinemath>. See S. Rigamonti et al., Phys. Rev. Lett. 114, 146402 (2015).
+		  </li>
+		</list>
+		</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="RPA">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>0</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="LRCstatic_NLF">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>1</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="LRCstatic">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>2</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="LRCdyn_NLF">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>3</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="LRCdyn">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>4</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="ALDA">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>5</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="MB1_NLF">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>7</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="MB1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>8</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="BO">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>9</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="BO_SCALAR">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>10</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="RBO">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>11</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="do" default="fromscratch">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nonreplace</oldname>
+                </xs:appinfo>
+                <xs:documentation> Decides if the TDDFT calculation is to be resumed starting from a
+                  new xc kernel or is to be skipped. </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="fromscratch"/>
+                  <xs:enumeration value="fromkernel"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="screening" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="do" default="fromscratch">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nonreplace</oldname>
+                </xs:appinfo>
+                <xs:documentation> Decides if the calculation of the screening is done from scratch
+                  or is to be skipped.</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="fromscratch"/>
+                  <xs:enumeration value="skip"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nosym" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nosymscr</oldname>
+                </xs:appinfo>
+                <xs:documentation>
+                  <attref>nosym</attref> is <pre>"true"</pre> if no symmetry information should be used
+                  for screening. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="ngridk" type="integertriple"
+              default="0 0 0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>ngridkscr</oldname>
+                </xs:appinfo>
+                <xs:documentation><inlinemath>{\mathbf k}</inlinemath>-point grid sizes for screening.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="reducek" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>reducekscr</oldname>
+                </xs:appinfo>
+                <xs:documentation>
+                  <attref>reducek</attref> is <pre>"true"</pre> if <inlinemath>{\mathbf k}</inlinemath>-points are to be reduced with crystal
+                  symmetries for screening. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="vkloff" type="vect3d"
+              default="-1.0d0 -1.0d0 -1.0d0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>vkloffscr</oldname>
+                </xs:appinfo>
+                <xs:documentation><inlinemath>{\mathbf k}</inlinemath>-point offset for screening.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="rgkmax" type="fortrandouble"
+              default="0.0d0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>rgkmaxscr</oldname>
+                </xs:appinfo>
+                <xs:documentation>The smallest muffin-tin radius times <pre>gkmax</pre> for
+                  screening.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nempty" type="xs:integer"
+              default="0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nemptyscr</oldname>
+                </xs:appinfo>
+                <xs:documentation>Number of empty states.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="screentype" default="full">
+              <xs:annotation>
+                <xs:documentation>Defines which type of screening is to be used.</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="full"/>
+                  <xs:enumeration value="diag"/>
+                  <xs:enumeration value="noinvdiag"/>
+                  <xs:enumeration value="longrange"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="BSE" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nosym" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nosymbse</oldname>
+                </xs:appinfo>
+                <xs:documentation> Set to <pre>"true"</pre> if no symmetry information should be
+                  used for BSE. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="xas" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> Set to <pre>"true"</pre> to perform BSE X-rasy absorption spectroscopy (XAS) calculation </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="xasspecies" type="xs:integer"
+              default="0">
+              <xs:annotation>
+                <xs:documentation>Species number for which the XAS is calculated.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="xasatom" type="xs:integer"
+              default="0">
+              <xs:annotation>
+                <xs:documentation>Atom number for which the XAS is calculated.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="xasedge" default="K">
+              <xs:annotation>
+                <xs:documentation>Defines the initial states of the XAS calculation.</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="K"/>
+                  <xs:enumeration value="L1"/>
+                  <xs:enumeration value="L2"/>
+                  <xs:enumeration value="L3"/>
+                  <xs:enumeration value="L23"/>
+                  <xs:enumeration value="M1"/>
+                  <xs:enumeration value="M2"/>
+                  <xs:enumeration value="M3"/>
+                  <xs:enumeration value="M23"/>
+                  <xs:enumeration value="M4"/>
+                  <xs:enumeration value="M5"/>
+                  <xs:enumeration value="M45"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="reducek" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>reducekbse</oldname>
+                </xs:appinfo>
+                <xs:documentation>
+                  <attref>reducek</attref> is <pre>"true"</pre> if <inlinemath>{\mathbf k}</inlinemath>-points are to be reduced with crystal
+                  symmetries for BSE. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="vkloff" type="vect3d"
+              default="-1.0d0 -1.0d0 -1.0d0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>vkloffbse</oldname>
+                </xs:appinfo>
+                <xs:documentation><inlinemath>{\mathbf k}</inlinemath>-point offset for BSE.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="rgkmax" type="fortrandouble"
+              default="0.0d0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>rgkmaxbse</oldname>
+                </xs:appinfo>
+                <xs:documentation>Smallest muffin-tin radius times
+                  <pre>gkmax</pre>.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="scrherm" type="xs:integer"
+              default="0">
+              <xs:annotation>
+                <xs:documentation> Method of how an almost Hermitian matrix is inverted. A value of
+                  0: invert full matrix (matrix is allowed to be not strictly Hermitian); a value of
+                  1: take the Hermitian average for inversion; a value of 2: assume Hermitian and
+                  use the upper triangle; a value of 3: assume Hermitian and use the lower
+                  triangle.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="fbzq" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>Set to <pre>"true"</pre> if q-point set is to be taken from the
+                  first Brillouin zone.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="sciavtype" default="spherical">
+              <xs:annotation>
+                <xs:documentation> Defines how the screened Coulomb interaction matrix is to be
+                  averaged (important for the singular terms). </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="spherical"/>
+                  <xs:enumeration value="screendiag"/>
+                  <xs:enumeration value="invscreendiag"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="sciavbd" type="xs:boolean"
+              default="true">
+              <xs:annotation>
+                <xs:documentation>
+                  <pre>"true"</pre> if the body of the screened Coulomb interaction is to be
+                  averaged (q=0). </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="sciavqhd" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  <pre>"true"</pre> if the head of the screened Coulomb interaction is to be
+                  averaged (q!=0). </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="sciavqwg" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  <pre>"true"</pre> if the wings of the screened Coulomb interaction are to be
+                  averaged (q!=0). </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="sciavqbd" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  <pre>"true"</pre> if the body of the screened Coulomb interaction is to be
+                  averaged (q!=0). </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="bsedirsing" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation><pre>"true"</pre> if effective singular part of direct term of BSE
+                  Hamiltonian is to be used.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="lmaxdielt" type="xs:integer"
+              default="14">
+              <xs:annotation>
+                <xs:documentation>Angular momentum cutoff of the spherical harmonics expansion of
+                  the dielectric matrix.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nleblaik" type="xs:integer"
+              default="5810">
+              <xs:annotation>
+                <xs:documentation>Number of points used for the Lebedev-Laikov grids must be
+                  selected according to V.I. Lebedev, and D.N. Laikov, Doklady Mathematics, 59
+                  (1999) 477.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nexcitmax" type="xs:integer"
+              default="100">
+              <xs:annotation>
+                <xs:documentation>Maximum number of excitons to be considered in a BSE
+                  calculation.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nstlbse" type="integerquadrupel"
+              default="0 0 0 0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nbfbse,nafbse</oldname>
+                </xs:appinfo>
+                <xs:documentation>Range of bands included for the BSE calculation. The first pair of
+                  numbers corresponds to the band index for local orbitals and valence states
+                  (counted from the lowest eigenenergy), the second pair corresponds to the band
+                  index of the conduction states (counted from the Fermi level).</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="nstlxas" type="integerpair"
+              default="0 0">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>nbfbse,nafbse</oldname>
+                </xs:appinfo>
+                <xs:documentation>Range of bands included for the BSE calculation. The pair corresponds to the band
+                  index of the conduction states (counted from the Fermi level).</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="aresbse" type="xs:boolean"
+              default="true">
+              <xs:annotation>
+                <xs:documentation> Is set to <pre>"true"</pre> if to consider the anti-resonant part
+                  for the BSE spectrum. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="bsetype" default="singlet">
+              <xs:annotation>
+                <xs:documentation>Defines which parts of the BSE Hamiltonian are to be
+                  considered.</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="IP"/>
+                  <xs:enumeration value="RPA"/>
+                  <xs:enumeration value="singlet"/>
+                  <xs:enumeration value="triplet"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="ngridksub" type="integertriple"
+              default="1 1 1">
+              <xs:annotation>
+                <xs:documentation> The sub-grid of a BSE double grid run. Any value larger than
+                1 triggers a computation following this scheme: the BSE is solved several times on coarse
+                grids, as given by <attref>ngridk</attref> and <attref>ngridq</attref>, which are shifted
+                to all symmetry non-equivalent points of the sub-grid. The latter are distributed
+                uniformly between the k-points of the coarse grid. The final results are obtained by
+                averaging all the spectra yielded in this way, what is expected to be almost as good as
+                solving the BSE on the fine grid, at much less computational cost. 
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="transitions" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Describe transitions between Kohn-Sham states for the calculation of
+              the Kohn-Sham response function (and screening) here. Individual transitions as well
+              as a range (or a list) of initial and final states can be defined.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:all>
+              <xs:element ex:importance="expert" ex:unit="" name="individual" minOccurs="0"
+                maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>A list of individual transitions consisting of an initial state
+                    a final state and a <inlinemath>{\mathbf k}</inlinemath>-point is given here. If the list is empty, no transitions
+                    are considered.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ex:importance="expert" ex:unit="" name="trans" minOccurs="0"
+                      maxOccurs="unbounded">
+                      <xs:annotation>
+                        <xs:documentation> An individual transition consisting of an initial state a
+                          final state and a <inlinemath>{\mathbf k}</inlinemath>-point is given here. Values of zero correspond to the
+                          inclusion of all initial and final states and all <inlinemath>{\mathbf k}</inlinemath>-points and can be used
+                          as "wildcards" (default). Therefore, an empty element amounts to include
+                          all transitions.</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:attribute ex:importance="expert" ex:unit="" ref="action" use="optional"
+                          default="include">
+                          <xs:annotation>
+                            <xs:documentation>Select to include or exclude states. If a state is
+                              included as well as excluded several times the last definition (in the
+                              sequence of individual transitions) counts.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="kpointnumber"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Number of <inlinemath>{\mathbf k}</inlinemath>-points to be considered. A value of zero
+                              (default) means to include all <inlinemath>{\mathbf k}</inlinemath>-points. </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="initial"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Initial state of individual transition. A value of
+                              zero (default) means to include all states. </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="final"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Final state of individual transition. A value of zero
+                              (default) means to include all states. </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ex:importance="expert" ex:unit="" name="ranges" minOccurs="0"
+                maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>A list of ranges of transitions (initial state as well as final
+                    state ranges) and a <inlinemath>{\mathbf k}</inlinemath>-point are given here. An empty list amounts to no
+                    transitions at all.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ex:importance="expert" ex:unit="" name="range" minOccurs="0"
+                      maxOccurs="unbounded">
+                      <xs:annotation>
+                        <xs:documentation>A range of transitions (for initial as well as final
+                          states) is given here. A range consists of a "start" and a "stop" values
+                          as well as a <inlinemath>{\mathbf k}</inlinemath>-point. Values of zero correspond to starting at the first
+                          state and stopping at the last state and considering all <inlinemath>{\mathbf k}</inlinemath>-points. They
+                          can be used as "wildcards" (default). Therefore, an empty element
+                          corresponds to the full initial/final state range for all
+                          <inlinemath>{\mathbf k}</inlinemath>-points.</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:attribute ex:importance="expert" ex:unit="" ref="action" use="optional"
+                          default="include">
+                          <xs:annotation>
+                            <xs:documentation>Select to include or exclude states. If a state is
+                              included as well as excluded several times the last definition (in the
+                              sequence of individual transitions) counts.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" ref="statestype"
+                          use="required">
+                          <xs:annotation>
+                            <xs:documentation>Select for initial or final state
+                              range.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="kpointnumber"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Number of <inlinemath>{\mathbf k}</inlinemath>-point to be considered. A value of zero
+                              (default) means to include all <inlinemath>{\mathbf k}</inlinemath>-point. </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="start"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Start value (first state) for range. A value of zero
+                              (default) means to start from the first state. </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="stop"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Stop value (last state) for range. A value of zero
+                              (default) means to stop at the last state (no upper
+                              limit).</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ex:importance="expert" ex:unit="" name="lists" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                  <xs:documentation>A list of initial and final state entries to be considered for
+                    transitions. An empty list amounts to no transitions at all.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ex:importance="expert" ex:unit="" name="istate" minOccurs="0"
+                      maxOccurs="unbounded">
+                      <xs:annotation>
+                        <xs:documentation>An initial or final state and corresponding <inlinemath>{\mathbf k}</inlinemath>-point is
+                          given here. Values of zero correspond to considering all initial/final
+                          states for all <inlinemath>{\mathbf k}</inlinemath>-points. They can be used as "wildcards" (default).
+                          Therefore, an empty element corresponds to the full initial/final state
+                          set for all <inlinemath>{\mathbf k}</inlinemath>-points.</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:attribute ex:importance="expert" ex:unit="" ref="action" use="optional"
+                          default="include">
+                          <xs:annotation>
+                            <xs:documentation>Select to include or exclude states. If a state is
+                              included as well as excluded several times the last definition (in the
+                              sequence of individual transitions) counts.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" ref="statestype"
+                          use="required">
+                          <xs:annotation>
+                            <xs:documentation>Select for initial or final state
+                              list.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="kpointnumber"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>Number of <inlinemath>{\mathbf k}</inlinemath>-point to be consider. A value of zero
+                              (default) means to include all <inlinemath>{\mathbf k}</inlinemath>-point. </xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute ex:importance="expert" ex:unit="" name="state"
+                          type="xs:integer" default="0">
+                          <xs:annotation>
+                            <xs:documentation>The state to be considered. A value of zero (default)
+                              means to include all states.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:all>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" ref="qpointset" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation> Finite momentum transfer <inlinemath>{ \bf G}+{ \bf q}</inlinemath>\
+              vector. </xs:documentation>
+            <xs:appinfo>
+              <oldname>vgqlmt,nqptmt</oldname>
+            </xs:appinfo>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="tetra" maxOccurs="1" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="tetraocc" type="xs:boolean"
+              default="false"/>
+            <xs:attribute ex:importance="expert" ex:unit="" name="tetradf" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  <pre>"true"</pre> if tetrahedron method is used for the <inlinemath>{\mathbf k}</inlinemath>-space integration in the
+                  Kohn-Sham response function. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="kordexc" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>tetrakordexc</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="cw1k" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>tetracw1k</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="qweights" type="xs:integer"
+              default="1">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>tetraqweights</oldname>
+                </xs:appinfo>
+                <xs:documentation>Choice of weights and nodes for the tetrahedron method and
+                  non-zero Q-point.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" ref="energywindow" maxOccurs="1" minOccurs="1"> </xs:element>
+	<xs:element ex:importance="expert" ex:unit="" name="plan" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ex:importance="expert" ex:unit="" name="doonly" minOccurs="0"
+                maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute ex:importance="expert" ex:unit="" name="task" use="required">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldname>noreplace</oldname>
+                      </xs:appinfo>
+                    </xs:annotation>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <!-- required workflow tasks below -->
+                        <xs:enumeration value="xsgeneigvec">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>301</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate eigenvectors, values and
+                              occupancies.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="tetcalccw">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>310</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate frequency-dependent weights for convolutions
+                              using the linear tetrahedron method. </xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writepmatxs">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>320</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate momentum matrix elements.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writeemat">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>330</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate q-dependent matrix
+                              elements.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="df">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>340</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate the Kohn-Sham response function checked in
+                              the code.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="df2">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>345</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate the Kohn-Sham response function taking into
+                              account the rigid shift of the BSE diagonal. ??? This is not a
+                              duplicate task, as the task-Nr. is referenced. checked in the code
+                              !</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="idf">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>350</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation> Set up simple xc-kernels, solve Dyson's equation for
+                              the full polarizability and determine the macroscopic dielectric
+                              function and other spectroscopic quantities.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="scrgeneigvec">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>401</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate eigenvectors, -values and occupancies for
+                              screening</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="scrtetcalccw">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>410</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate frequency-dependent weights for convolutions
+                              using the linear tetrahedron method for screening. </xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="scrwritepmat">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>420</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate momentum matrix elements for
+                              screening.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="screen">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>430</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate RPA screening (ignoring scissor's
+                              shift).</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="scrcoulint">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>440</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate direct term of BSE
+                              Hamiltonian.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="exccoulint">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>441</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate exchange term of BSE
+                              Hamiltonian.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="bse">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>445</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Bethe-Salpeter equation.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="bsegenspec">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>446</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Read BSE eigenvalues and regenerate dielectric and loss functions.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writebevec">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>447</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>ASCII output of BSE eigenvalus.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="kernxc_bse">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>450</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation> Calculate frequency dependent xc-kernel drived from
+                              the Bethe-Salpeter equation in first order. </xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <!-- experimental and debugging tasks below -->
+                        <xs:enumeration value="writebandgapgrid">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>23</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Estimate bandgap from regular grid.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writepmat">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>120</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate momentum matrix elements
+                              (legacy).</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="dielectric">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>121</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Linear optics (legacy).</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writepmatasc">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>321</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>ASCII output of momentum matrix
+                              elements.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="pmatxs2orig">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>322</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Convert momentum matrix elements file to old
+                              format.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writeematasc">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>331</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>ASCII output of q-dependent matrix
+                              elements.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="writepwmat">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>335</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Calculate matrix elements of the plane wave (simple
+                              version for checking).</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="emattest">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>339</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Check relation between matr. el. of exp. and mom.
+                              matr. el.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="x0toasc">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>341</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>ASCII output of Kohn Sham response
+                              function.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="x0tobin">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>342</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Binary output of Kohn Sham response
+                              function.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="fxc_alda_check">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>398</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Check ALDA kernel.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="kernxc_bse3">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>451</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>BSE-kernel, straight-forward
+                              version.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="testxs">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>499</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Debug routine of xs-part.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="xsestimate">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>700</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Estimate disk-space, cpu-time and memory
+                              requirements.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="xstiming">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>701</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Test timing.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <!-- debugging main part -->
+                        <xs:enumeration value="testmain">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>999</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Debug routine of main part of code.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+
+                        <!-- Visualize BSE exciton wavefunction -->
+                        <xs:enumeration value="excitonWavefunction">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>710</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>
+                              Generate data to visualize the 6-d electron-hole wavefunction.
+                            </xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+
+                        <!-- import/export tasks below -->
+                        <xs:enumeration value="portstate(1)">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>900</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Generate STATE.xml file from STATE.OUT
+                              file.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="portstate(2)">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>901</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Generate STATE.OUT file from STATE.xml
+                              file.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="portstate(-1)">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>910</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Display information about STATE.OUT
+                              file.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                        <xs:enumeration value="portstate(-2)">
+                          <xs:annotation>
+                            <xs:appinfo>
+                              <oldnr>911</oldnr>
+                            </xs:appinfo>
+                            <xs:documentation>Display information about STATE.xml
+                              file.</xs:documentation>
+                          </xs:annotation>
+                        </xs:enumeration>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute ex:importance="essential" ex:unit="" name="bfieldc" type="vect3d"
+		    default="0.0d0 0.0d0 0.0d0 ">
+	<xs:annotation>
+	  <xs:documentation> 
+	    This attribute overrides the homonym attribute from the groundstate/spin element.
+	  </xs:documentation>
+	</xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="dogroundstate" default="fromfile">
+	<xs:annotation>
+	  <xs:appinfo>
+	    <oldname>nonreplace</oldname>
+	  </xs:appinfo>
+          <xs:documentation> Decides if the ground state is calculated starting from scratch or using
+	  the densities from file.</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType>
+	  <xs:restriction base="xs:string">
+	    <xs:enumeration value="fromscratch"/>
+	    <xs:enumeration value="fromfile"/>
+	  </xs:restriction>
+	</xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="maxscl" type="xs:integer"
+		    default="1">
+	<xs:annotation>
+	  <xs:documentation>Upper limit of the self-consistency loop for the calculation of eigenvectors and eigenvalues
+	  from an existing ground-state calculation.</xs:documentation>
+	</xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="emattype" type="xs:integer" default="1">
+        <xs:annotation>
+          <xs:documentation>Type of matrix element generation (band-combinations). Should only be
+            referenced for experimental features. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="dfoffdiag" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation>
+            <pre>"true"</pre> if also off-diagonal tensor elements for the interacting response
+            function are to be calculated. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxapwwf" type="xs:integer"
+        default="-1">
+        <xs:annotation>
+          <xs:documentation>Maximum angular momentum for APW functions for q-dependent matrix
+            elements.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxemat" type="xs:integer" default="3">
+        <xs:annotation>
+          <xs:documentation> Maximum angular momentum for Rayleigh expansion of <inlinemath>{\bf
+              q}</inlinemath>-dependent plane wave factor. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="emaxdf" type="fortrandouble"
+        default="1.0d10">
+        <xs:annotation>
+          <xs:documentation>Energy cutoff for the unoccupied states in the Kohn-Sham response
+            function and screening. This parameter ensures a cutoff at the specified energy and is
+            defined in addition to the <attref>nempty</attref> parameter.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="broad" type="fortrandouble"
+        default="0.01d0">
+        <xs:annotation>
+          <xs:documentation>Lorentzian broadening for all spectra</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="epsdfde" type="fortrandouble"
+        default="1.0d-8">
+        <xs:annotation>
+          <xs:documentation>The smallest energy difference for which the square of its inverse will
+            be considered in the Kohn-Sham response function. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="tevout" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation>
+            <pre>"true"</pre> if energy outputs are in eV. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="xstype" use="required">
+        <xs:annotation>
+          <xs:documentation>Should TDDFT be used or BSE.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="TDDFT"/>
+            <xs:enumeration value="BSE"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <!-- Here are experimental parameters -->
+      <xs:attribute ex:importance="expert" ex:unit="" name="skipgnd" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:documentation>
+	    If set to <pre>"true"</pre>, recalculation of KS eigenvalues and eigenvectors is skipped.
+	  </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" ref="fastpmat" default="true">
+        <xs:annotation>
+          <xs:documentation> If set to <pre>"true"</pre>, a fast method to calculate APW-lo, lo-APW
+            and lo-lo parts of the momentum matrix elements in the muffin-tin is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="pwmat" default="mm" >
+        <xs:annotation>
+          <xs:documentation> Algorithm for calculating matrix elements of plane waves.
+             Matrix multiplications (mm) are better suited for small systems, while
+             fast Fourier transforms (fft) are appropriate for large systems.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mm"/>
+            <xs:enumeration value="fft"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="tappinfo" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation><pre>"true"</pre> to append info to output file.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="dbglev" type="xs:integer" default="0">
+        <xs:annotation>
+          <xs:documentation>Debugging level. Any value <inlinemath>{ > 0 }</inlinemath>  will
+            produce additional debug output. The large the value, the more information is
+            output.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="gqmaxtype" default="|G+q|">
+        <xs:annotation>
+          <xs:documentation>Defines the way the gqmax cutoff is applied for the selection of the
+            G-vectors. For <inlinemath>"|G+q|"</inlinemath> G vectors are selected such that
+              <inlinemath>{\bf G+q}</inlinemath> lies within the <attref>gqmax</attref> cutoff. For
+              <inlinemath>"|G|"</inlinemath> G vectors are selected such that <inlinemath>{\bf
+              G}</inlinemath> lies within the <pre>gqmax</pre> cutoff. </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="|G+q|"> </xs:enumeration>
+            <xs:enumeration value="|G|"> </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="gqmax" type="fortrandouble"
+        default="0.0d0">
+        <xs:annotation>
+          <xs:documentation><inlinemath>{\bf |G+q|}</inlinemath> cutoff for Kohn-Sham response
+            function, screening and for expansion of Coulomb potential</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <!-- section of parameters from groundstate which are allowed to be different from the ones of the ground state run -->
+      <xs:attribute ex:importance="expert" ex:unit="" name="nosym" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>nosymxs</oldname>
+          </xs:appinfo>
+          <xs:documentation>
+            <attref>nosym</attref> is <pre>"true"</pre> if no symmetry information should be used
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="ngridk" type="integertriple"
+        default="1 1 1">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>ngridkxs</oldname>
+          </xs:appinfo>
+          <xs:documentation><inlinemath>{\mathbf k}</inlinemath>-point grid sizes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="vkloff" type="vect3d"
+        default="0.0d0 0.0d0 0.0d0 ">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>vkloffxs</oldname>
+          </xs:appinfo>
+          <xs:documentation> The <inlinemath>{\mathbf k}</inlinemath>-point set offset. All <inlinemath>{\mathbf k}</inlinemath>-points of a regular <inlinemath>{\mathbf k}</inlinemath>-mesh (a mesh
+            containing the Gamma point) are shifted by a constant vector given by <inlinemath>({\rm
+              vkloff}_1/N_1, {\rm vkloff}_2/N_2, {\rm vkloff}_3/N_3)</inlinemath>, where
+              <inlinemath> (N_1,N_2,N_3) </inlinemath> is the division of the <inlinemath>{\mathbf k}</inlinemath>-point mesh. It
+            should be selected such that all symmetries among the <inlinemath>{\mathbf k}</inlinemath>-points from the regular
+            (non-shifted) mesh are broken. An exception is the case of optical spectra without local
+            field effects where symmetries among <inlinemath>{\mathbf k}</inlinemath>-points are explicitly taken into account.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="reducek" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>reducekxs</oldname>
+          </xs:appinfo>
+          <xs:documentation>
+            <attref>reducek</attref> is <pre>"true"</pre> if <inlinemath>{\mathbf k}</inlinemath>-points are to be reduced (with crystal
+            symmetries). </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="ngridq" type="integertriple"
+        default="1 1 1">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>ngridqxs</oldname>
+          </xs:appinfo>
+          <xs:documentation>q-point grid sizes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="reduceq" type="xs:boolean"
+        default="true">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>reduceqxs</oldname>
+          </xs:appinfo>
+          <xs:documentation>
+            <attref>reducek</attref> is <pre>"true"</pre> if q-points are to be reduced (with crystal
+            symmetries). </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="rgkmax" type="fortrandouble" default="0.0d0">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>rgkmaxxs</oldname>
+          </xs:appinfo>
+ 	  <xs:documentation>Smallest muffin-tin radius times <pre>gkmax</pre>. If set to zero (the default), this value defaults to the rgkmax set in the groundstate element.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>      
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="swidth" type="fortrandouble"
+        default="0.001d0">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>swidthxs</oldname>
+            <olddefault default="0.01d0"/>
+          </xs:appinfo>
+          <xs:documentation>Width of the smooth approximation to the Dirac delta function (must be >
+            0).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxapw" type="xs:integer" default="10">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>lmaxapwxs</oldname>
+            <olddefault default="8"/>
+          </xs:appinfo>
+          <xs:documentation>Angular momentum cut-off for the APW functions.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxmat" type="xs:integer" default="5">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>lmaxmatxs</oldname>
+          </xs:appinfo>
+          <xs:documentation>Angular momentum cut-off for the outer-most loop in the hamiltonian and
+            overlap matrix setup.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="nempty" type="xs:integer" default="5">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>nemptyxs</oldname>
+          </xs:appinfo>
+          <xs:documentation> Number of empty states. This parameter determines the energy cutoff for
+            the excitation spectra. For determining the number of states related to an energy
+            cutoff, perform one iteration of a SCF calculation, setting <attref>nempty</attref> to a
+            higher value and check the <filename>EIGVAL.OUT</filename>. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="Hartree" ref="scissor" default="0.0d0">
+        <xs:annotation>
+          <xs:documentation>Scissors correction to correct the conduction band
+            energies.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+
+
+</xs:schema>

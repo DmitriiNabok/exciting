@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:ex="http://xml.exciting-code.org/inputschemaextentions.xsd"
+xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+targetNamespace="http://xml.exciting-code.org/inputschemaextentions.xsd"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ >
+ 
+  <xs:attribute name="importance">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="essential"></xs:enumeration>
+        <xs:enumeration value="expert"></xs:enumeration>
+        <xs:enumeration value="experimental"></xs:enumeration>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  
+  <xs:attribute name="unit">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="Bohr"></xs:enumeration>
+        <xs:enumeration value="Hartree"></xs:enumeration>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  
+</xs:schema>
