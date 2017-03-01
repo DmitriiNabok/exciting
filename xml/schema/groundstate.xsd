@@ -1,0 +1,3122 @@
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ex="http://xml.exciting-code.org/inputschemaextentions.xsd"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xsi:schemaLocation="http://xml.exciting-code.org/inputschemaextentions.xsd    http://xml.exciting-code.org/inputschemaextentions.xsd">
+  <xs:include id="common" schemaLocation="common.xsd"/>
+  <xs:annotation>
+    <xs:appinfo>
+      <parent>/input</parent>
+      <root>groundstate</root>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element ex:importance="essential" ex:unit="" name="groundstate">
+    <xs:annotation>
+      <xs:documentation> 
+      The <elementref>groundstate</elementref> element is required for any calculation. 
+      Its attributes are parameters and methods which are used to calculate the ground-state density.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:all>
+        
+	<xs:element ex:importance="expert" ex:unit="" name="DFTD2parameters" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation> 
+	      This element allows to customize parameters when either the option <pre>"DFTD2"</pre> of the attribute <attref>vdWcorrection</attref> is chosen, or the subelement <elementref>DFTD2</elementref> of the element <elementref>properties</elementref> is specified.
+	    </xs:documentation>
+            <xs:appinfo></xs:appinfo>
+          </xs:annotation>
+          <xs:complexType>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="s6" type="fortrandouble" default="0.75d0">
+              <xs:annotation>
+                <xs:documentation>
+			Global scaling factor for all <inlinemath>C_6</inlinemath>-dispersion coefficients for the method <pre>"DFTD2"</pre>. This factor depends on the exchange-correlation functional in use. The default value suits PBE calculations.  
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="sr6" type="fortrandouble" default="1.1d0">
+              <xs:annotation>
+                <xs:documentation>
+			Scaling factor for van-der-Waals radii for the method <pre>"DFTD2"</pre>. This factor depends on the exchange-correlation functional in use. The default value suits PBE calculations.  
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="d" type="fortrandouble" default="20.0d0">
+              <xs:annotation>
+                <xs:documentation>
+			This damping constant determines the steepnes of the damping function for the method <pre>"DFTD2"</pre>.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="cutoff" type="fortrandouble" default="95.0d0">
+              <xs:annotation>
+                <xs:documentation>
+		  Cutoff distance of interatomic interactions for the method <pre>"DFTD2"</pre>. In the sum over all pairwise interactions, only pairs of atoms are considered which are closer to each other than the value of the <pre>cutoff</pre> attribute.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+	  </xs:complexType>
+	</xs:element>
+
+
+
+	<xs:element ex:importance="expert" ex:unit="" name="TSvdWparameters" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation> 
+	      This element allows to customize parameters when either the option <pre>"TSvdW"</pre> of the attribute <attref>vdWcorrection</attref> is chosen, or the subelement <elementref>TSvdW</elementref> of the element <elementref>properties</elementref> is specified.
+	    </xs:documentation>
+            <xs:appinfo></xs:appinfo>
+          </xs:annotation>
+          <xs:complexType>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="s6" type="fortrandouble" default="1.0d0">
+              <xs:annotation>
+                <xs:documentation>
+			Global scaling factor for all <inlinemath>C_6</inlinemath>-dispersion coefficients for the method <pre>"TSvdW"</pre>.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="sr6" type="fortrandouble" default="0.94d0">
+              <xs:annotation>
+                <xs:documentation>
+			Scaling factor for van-der-Waals radii for the method <pre>"TSvdW"</pre>. This factor depends on the exchange-correlation functional in use. The default value suits PBE calculations.  
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="d" type="fortrandouble" default="20.0d0">
+              <xs:annotation>
+                <xs:documentation>
+			This damping constant determines the steepnes of the damping function for the method <pre>"TSvdW"</pre>.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="cutoff" type="fortrandouble" default="95.0d0">
+              <xs:annotation>
+                <xs:documentation>
+		  Cutoff distance of interatomic interactions for the method <pre>"TSvdW"</pre>. In the sum over all pairwise interactions, only pairs of atoms are considered which are closer to each other than the value of the <pre>cutoff</pre> attribute.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="nr" type="xs:integer" default="120">
+              <xs:annotation>
+                <xs:documentation>
+		  Number of radial grid points for the Gauss-Chebyshev quadrature.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="essential" ex:unit="" name="nsph" type="xs:integer" default="590">
+              <xs:annotation>
+                <xs:documentation>
+		  Number of Lebedev grid points. The <bf>only</bf> possible values are: <pre>"1"</pre>, <pre>"6"</pre>, <pre>"14"</pre>, <pre>"26"</pre>, <pre>"38"</pre>, <pre>"50"</pre>, <pre>"74"</pre>, <pre>"86"</pre>, <pre>"110"</pre>, <pre>"146"</pre>, <pre>"170"</pre>, <pre>"194"</pre>, <pre>"230"</pre>, <pre>"266"</pre>, <pre>"302"</pre>, <pre>"350"</pre>, <pre>"434"</pre>, <pre>"590"</pre>, <pre>"770"</pre>, <pre>"974"</pre>, <pre>"1202"</pre>, <pre>"1454"</pre>, <pre>"1730"</pre>, <pre>"2030"</pre>, <pre>"2354"</pre>, <pre>"2702"</pre>, <pre>"3074"</pre>, <pre>"3740"</pre>, <pre>"3890"</pre>, <pre>"4334"</pre>, <pre>"4802"</pre>, <pre>"5294"</pre>, <pre>"5810"</pre>.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+	  </xs:complexType>
+	</xs:element>
+
+
+	
+	<xs:element ex:importance="essential" ex:unit="" name="spin" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation> 
+	    If the <elementref>spin</elementref> element is present, calculation is done with
+            spin polarization. 
+	    </xs:documentation>
+            <xs:appinfo>
+              <oldname>spinpol</oldname>
+            </xs:appinfo>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="essential" ex:unit="" name="momfix" type="vect3d"
+              default="0.0d0 0.0d0 0.0d0">
+              <xs:annotation>
+                <xs:documentation>
+	        The desired total moment for a fixed spin moment (<pre>FSM</pre>) calculation.
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="bfieldc" type="vect3d"
+              default="0.0d0 0.0d0 0.0d0 ">
+              <xs:annotation>
+                <xs:documentation> 
+		Allows to apply a constant <inlinemath>{ \bf B}_{\tt ext}</inlinemath> field. 
+		This is an external constant magnetic field applied throughout the entire unit cell 
+		and enters the second-variational Hamiltonian as 
+		<displaymath>\frac{g_e\,\alpha}{4}\;\vec{\sigma}\cdot{\bf B}_{\tt ext}\,,</displaymath>
+		where <inlinemath>g_e</inlinemath> is the electron <inlinemath>g</inlinemath>-factor
+                (<inlinemath>g_e</inlinemath>=2.0023193043718). The external magnetic field is normally used
+                to break spin symmetry for spin-polarised calculations and considered to be
+                infinitesimal with no direct contribution to the total energy. In cases where the
+                magnetic field is finite (for example when computing magnetic response) the
+                external <inlinemath>{ \bf B}</inlinemath>-field energy reported in
+                <filename>INFO.OUT</filename> (when the attribute <attref>outputlevel</attref> is set to 
+		<pre>"high"</pre>) should be added to the total energy by hand. This external magnetic field 
+		is applied hroughout the entire unit cell. To apply magnetic fields in particular muffin-tins 
+		use the <attref>bfcmt</attref> vectors in the <elementref>atom</elementref> elements.
+                Collinear calculations are more efficient if the field is applied in the
+                <inlinemath>z</inlinemath>-direction. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="spinorb" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation> 
+		If <attref>spinorb</attref> is <pre>"true"</pre>, then a
+                <inlinemath>\boldsymbol \sigma\cdot{ \bf L}</inlinemath> term is added to the
+                second-variational Hamiltonian. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="spinsprl" type="xs:boolean"
+              default="false">
+              <xs:annotation>
+                <xs:documentation> 
+		Set to <pre>"true"</pre> if a spin-spiral calculation is required. 
+                Experimental feature for the calculation of spin-spiral states.
+                See <attref>vqlss</attref> for details. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="vqlss" type="vect3d"
+              default="0.0d0 0.0d0 0.0d0">
+              <xs:annotation>
+                <xs:documentation> 
+		This attribute allows to specify the <inlinemath>{ \bf q}</inlinemath>-vector of the
+                spin-spiral state in lattice coordinates. Spin-spirals arise from spinor states
+                assumed to be of the form 
+		<displaymath> 
+		  \Psi^{ \bf q}_{ \bf k}({ \bf r})= 
+		  \left(\begin{array}{c} 
+		  U^{{ \bf q}\uparrow}_{ \bf k}({ \bf r})\;e^{i({ \bf k+q/2})\cdot{ \bf r}} \\
+		  \phantom{o} \\
+                  U^{{ \bf q}\downarrow}_{ \bf k}({ \bf r})\;e^{i({ \bf k-q/2})\cdot{ \bf r}} \\ 
+                  \end{array} \right)\,. 
+		</displaymath> 
+		These spin-spirals are determined using a second-variational approach, 
+		and give rise to a magnetization density of the form
+                <displaymath> 
+		  {\bf m}^{ \bf q}({ \bf r})=\left[m_x({\bf r})\,\cos({ \bf q \cdot r}),\;
+                  m_y({\bf r})\,\sin({ \bf q \cdot r}),\; m_z({\bf r})\right]\,, 
+		</displaymath> where
+                <inlinemath>m_x</inlinemath>, <inlinemath>m_y</inlinemath>, and <inlinemath>m_z</inlinemath>
+                have the periodicity of the lattice. See also <attref>spinsprl</attref>. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="taufsm" type="fortrandouble"
+              default="0.01d0">
+              <xs:annotation>
+                <xs:documentation> 
+		The effective magnetic field required for fixing the spin moment
+                to a given value, is updated according to 
+                <displaymath> 
+		  {\bf B}_{\tt FSM}^{i+1}={\bf B}_{\tt FSM}^i+\tau_{\tt FSM}\left(
+                  \boldsymbol{\mu}^i-\boldsymbol{\mu}_{\tt FSM}\right)\,, 
+		</displaymath>
+                for iteration <inlinemath>i</inlinemath>. It must be positive. 
+		</xs:documentation>
+              </xs:annotation>
+              </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="reducebf" type="fortrandouble"
+              default="1.0d0">
+              <xs:annotation>
+                <xs:documentation> 
+		After each iteration the external magnetic fields are multiplied
+                with reducebf. This allows for a large external magnetic field at the start of
+                the self-consistent loop to break spin symmetry, while at the end of the loop the
+                field will be effectively zero, i.e. infinitesimal. See <attref>bfieldc</attref>
+                and atom element. 
+		</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="fixspin" default="none">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="none">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>0</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="total FSM">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>1</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="localmt FSM">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>2</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="both">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>3</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>      
+        <xs:element ex:importance="experimental" ex:unit="" name="HartreeFock" minOccurs="0"
+          maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>If preset Hartree-Fock calculation is triggered.</xs:documentation>
+          </xs:annotation>                 
+          <xs:complexType>
+          </xs:complexType>
+          
+          </xs:element>
+                <xs:element ex:importance="expert" ex:unit="" name="dfthalf" minOccurs="0" maxOccurs="1">
+			<xs:annotation>
+			  <xs:documentation>The presence of this element triggers <bf>DFT-1/2</bf> calculations.</xs:documentation>				
+			</xs:annotation>
+			<xs:complexType>
+				<xs:attribute ex:importance="expert" ex:unit="" name="printVSfile" type="xs:boolean"
+							default="false">
+					<xs:annotation>
+						<xs:documentation> When set to <pre>"true"</pre>, the self-energy 
+						correction potential <inlinemath>V_S({\bf r})</inlinemath>
+						(as defined in the <bf>DFT-1/2</bf> method) is calculated for each constituent 
+						atomic species and written into the files <pre>VS_S*.OUT</pre>, 
+						where <pre>*</pre> ranges from <bf>1</bf> to the number of atomic species. 
+						The exciting run quits after the printing. In this case, a serial calculation 
+						is suggested. It is useful to visualize the self-energy potential, or for 
+						debugging purposes.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:complexType>			
+          </xs:element>
+        <xs:element ex:importance="essential" ex:unit="" name="Hybrid" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Options for hybrid functionals.</xs:documentation>
+          </xs:annotation>                 
+          <xs:complexType>
+            <xs:attribute ex:importance="essential" ex:unit="" name="exchangetype" default="HF">
+              <xs:annotation>
+                  <xs:documentation> Type of exchange (Hartree Fock or OEP) 
+                  to be used for the exact exchange.
+                  </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="HF">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>1</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="OEP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>2</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="excoeff" type="fortrandouble"
+              default="0.25d0">
+              <xs:annotation>
+                <xs:documentation> Define value of the mixing parameter for exact exchange.
+                  ATTENTION: If you are using libxc, the libxc settings will be employed 
+                  and your choice of this parameter will be ignored. 
+                  </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="experimental" ex:unit="" name="eccoeff" type="fortrandouble"
+              default="1.0d0">
+              <xs:annotation>
+                <xs:documentation> Use for testing purposes only! </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="maxscl" type="xs:integer"
+              default="50">
+              <xs:annotation>
+                <xs:documentation>Upper limit for the Hybrids self-consistency loop.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="experimental" ex:unit="" name="savepotential" type="xs:boolean" default="true">
+              <xs:annotation>
+                <xs:documentation>
+                  If set to true, the non-local potential will be stored in the file VNLMAT.OUT 
+                  ATTENTION: this file can become extremely large (size: Hamiltoniansize * Hamiltoniansize * k-point number * 16).
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="experimental" ex:unit="" name="updateRadial" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  If set to true, the radial functions will be updated after each hybrid cycle.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+        <xs:element ex:importance="expert" ex:unit="" name="solver" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Optional configuration options for eigenvector
+              solver.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="type" default="Lapack">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>solvertype</oldname>
+                </xs:appinfo>
+                <xs:documentation>Selects the eigenvalue solver for the first variational
+                  equation</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="Lapack">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>1</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="Arpack">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>2</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <!-- xs:enumeration value="DIIS">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>3</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:enumeration-->
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="packedmatrixstorage"
+              type="xs:boolean" use="optional" default="false">
+              <xs:annotation>
+                <xs:documentation> In the default calculation the matrix is sored in packed form.
+                  When using multi-threaded BLAS setting this parameter to <pre>"false"</pre>
+                  increases efficiency. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="epsarpack" type="fortrandouble"
+              default="1.0d-14">
+              <xs:annotation>
+                <xs:documentation>Tolerance parameter for the ARPACK shift invert
+                  solver</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="ArpackLinSolve" default="LDL">
+              <xs:annotation>
+                <xs:documentation> 
+                    Linear solve method during shift-and-invert process in ARPACK.
+                    Pick either LDL, LU, LL, Diag and InvertOnce.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="LDL"/>
+                  <xs:enumeration value="LL"/>
+                  <xs:enumeration value="LU"/>
+                  <xs:enumeration value="Diag"/>
+                  <xs:enumeration value="InvertOnce"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="DecompPrec" default="dp">
+              <xs:annotation>
+                <xs:documentation>
+                   Precision used during the factorization in ARPACK.
+                   Pick either sp or dp.
+                </xs:documentation>
+              </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="sp"/>
+                    <xs:enumeration value="dp"/>
+                  </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="ArpackImproveInverse" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  Tells whether iterative improvement should be applied during the shift-and-invert procedure.
+                  Setting to true may be useful, for instance, when DecompPrec is set to "sp".
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+
+            <xs:attribute ex:importance="expert" ex:unit="Hartree" name="evaltol"
+              type="fortrandouble" default="1.0d-14">
+              <xs:annotation>
+                <xs:documentation>Error tolerance for the first-variational eigenvalues using the
+                  LAPACK Solver</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="ArpackUserDefinedShift"
+              type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  ArpackShift will be used if this flag is set to true, otherwise the energy shift will be determined internally.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="Hartree" name="ArpackShift"
+              type="fortrandouble" default="-1.0d0">
+              <xs:annotation>
+                <xs:documentation>
+                  Energy shift in the shift-and-invert procedure in the ARPACK solver. 
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="OEP" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <!--xs:documentation>If present exact exchange calculation is triggered.
+              (experimental)</xs:documentation-->
+            <xs:documentation>Necessary, if exact exchange calculation is to be performed.
+              </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="maxitoep" type="xs:integer"
+              default="300">
+              <xs:annotation>
+                <xs:documentation>Maximum number of iterations when solving the exact exchange
+                  integral equations.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="tauoep" type="vect3d"
+              default="1.0d0 0.2d0 1.5d0">
+              <xs:annotation>
+                <xs:documentation> The optimised effective potential is determined using an
+                  iterative method. <it>Phys. Rev. Lett.</it>
+                <bf>98</bf>, 196405 (2007). At the first iteration
+                  the step length is set to tauoep(1). During subsequent iterations, the step
+                  length is scaled by tauoep(2) or tauoep(3), when the residual is increasing or
+                  decreasing, respectively. See also <attref>maxitoep</attref>. </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="convoep" type="fortrandouble"
+              default="1e-11">
+              <xs:annotation>
+                <xs:documentation>Convergence tolerance for OEP residue when solving the exact exchange
+                  integral equations.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="experimental" ex:unit="" name="RDMFT" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>If present Reduced Density Matrix Funcional Theory calculation is
+              triggered</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="rdmxctype" type="xs:integer"
+              default="2">
+              <xs:annotation>
+                <xs:documentation>XC functional.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="rdmmaxscl" type="xs:integer"
+              default="1">
+              <xs:annotation>
+                <xs:documentation>maximum number of self-consistent loops.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="maxitn" type="xs:integer"
+              default="250">
+              <xs:annotation>
+                <xs:documentation>maximum number of iteration for occupation number
+                  optimization.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="maxitc" type="xs:integer"
+              default="10">
+              <xs:annotation>
+                <xs:documentation>maximum number of iteration for natural orbital
+                  optimization.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="taurdmn" type="fortrandouble"
+              default="1.0d0">
+              <xs:annotation>
+                <xs:documentation>step size for occupation numbers.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="taurdmc" type="fortrandouble"
+              default="0.5d0">
+              <xs:annotation>
+                <xs:documentation>Step size for natural orbital coefficients.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="rdmalpha" type="fortrandouble"
+              default="0.7d0">
+              <xs:annotation>
+                <xs:documentation>exponent for the functional.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="rdmtemp" type="fortrandouble"
+              default="0.0d0">
+              <xs:annotation>
+                <xs:documentation>temperature.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="expert" ex:unit="" name="output" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Specifications on the file formats for output
+              files.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="" name="state" default="binary">
+              <xs:annotation>
+                <xs:documentation>Selects the file format of the STATE file.</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="binary"/>
+                  <xs:enumeration value="XML"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" name="libxc">
+          <xs:complexType>
+            <xs:attribute default="XC_GGA_X_PBE" name="exchange" use="optional">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="none">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 0 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> No exchange </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_LDA_X">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 1 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Exchange in 3D </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_LDA_X_2D">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 19 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Exchange in 2D </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_LDA_X_1D">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 21 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Exchange in 1D </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_SSB_SW">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 90 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Swarta, Sola and Bickelhaupt correction to PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_SSB">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 91 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Swarta, Sola and Bickelhaupt </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_SSB_D">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 92 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Swarta, Sola and Bickelhaupt dispersion </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_BPCCAC">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 98 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> BPCCAC (GRAC for the energy) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 101 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew, Burke &amp; Ernzerhof exchange </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PBE_R">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 102 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew, Burke &amp; Ernzerhof exchange (revised) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_B86">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 103 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 86 Xalfa,beta,gamma </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_HERMAN">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 104 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Herman et al original GGA </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_B86_MGC">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 105 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 86 Xalfa,beta,gamma (with mod. grad. correction) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_B88">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 106 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 88 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_G96">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 107 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Gill 96 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PW86">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 108 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew &amp; Wang 86 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PW91">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 109 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew &amp; Wang 91 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_OPTX">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 110 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Handy &amp; Cohen OPTX 01 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_DK87_R1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 111 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> dePristo &amp; Kress 87 (version R1) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_DK87_R2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 112 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> dePristo &amp; Kress 87 (version R2) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_LG93">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 113 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Lacks &amp; Gordon 93 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_FT97_A">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 114 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Filatov &amp; Thiel 97 (version A) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_FT97_B">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 115 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Filatov &amp; Thiel 97 (version B) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PBE_SOL">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 116 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew, Burke &amp; Ernzerhof exchange (solids) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_RPBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 117 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Hammer, Hansen &amp; Norskov (PBE-like) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_WC">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 118 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Wu &amp; Cohen </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_MPW91">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 119 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Modified form of PW91 by Adamo &amp; Barone </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_AM05">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 120 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Armiento &amp; Mattsson 05 exchange </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PBEA">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 121 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Madsen (PBE-like) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_MPBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 122 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Adamo &amp; Barone modification to PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_XPBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 123 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> xPBE reparametrization by Xu &amp; Goddard </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_2D_B86_MGC">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 124 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 86 MGC for 2D systems </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_BAYESIAN">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 125 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Bayesian best fit for the enhancement factor </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PBE_JSJR">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 126 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> JSJR reparametrization by Pedroza, Silva &amp; Capelle </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_2D_B88">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 127 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 88 in 2D </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_2D_B86">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 128 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 86 Xalfa,beta,gamma </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_2D_PBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 129 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew, Burke &amp; Ernzerhof exchange in 2D </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_OPTB88_VDW">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 139 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 88 reoptimized to be used with vdW functional of Dion et </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_PBEK1_VDW">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 140 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> PBE reparametrization for vdW </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_OPTPBE_VDW">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 141 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> PBE reparametrization for vdW </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_RGE2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 142 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Regularized PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_RPW86">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 144 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> refitted Perdew &amp; Wang 86 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_KT1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 145 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Keal and Tozer version 1 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_MB88">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 149 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Modified Becke 88 for proton transfer </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_SOGGA">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 150 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Second-order generalized gradient approximation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_SOGGA11">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 151 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Second-order generalized gradient approximation 2011 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_C09X">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 158 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> C09x to be used with the VdW of Rutgers-Chalmers </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_LB">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 160 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> van Leeuwen &amp; Baerends </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_LBM">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 182 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> van Leeuwen &amp; Baerends modified </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_OL2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 183 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Exchange form based on Ou-Yang and Levy v.2 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_APBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 184 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> mu fixed from the semiclassical neutral atom </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_HTBS">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 191 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Haas, Tran, Blaha, and Schwarz </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_AIRY">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 192 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Constantin et al based on the Airy gas </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_LAG">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 193 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Local Airy Gas </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+		  <!-- Range seperated / screened functionals currently not implemented-->
+                  <!--xs:enumeration value="XC_GGA_X_WPBEH">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 524 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> short-range version of the PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_HJS_PBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 525 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS screened exchange PBE version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_HJS_PBE_SOL">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 526 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS screened exchange PBE_SOL version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_HJS_B88">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 527 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS screened exchange B88 version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_HJS_B97X">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 528 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS screened exchange B97x version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_X_ITYH">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 529 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> short-range recipe for exchange GGA functionals </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration-->
+                  <!--xs:enumeration value="XC_HYB_GGA_X_SOGGA11_X">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 426 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Hybrid based on SOGGA11 form </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration-->
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute default="XC_GGA_C_PBE" name="correlation" use="optional">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                   <xs:enumeration value="none">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 0 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> No correlations </xs:documentation>
+                    </xs:annotation>
+                   </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_WIGNER">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 2 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Wigner parametrization </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_RPA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 3 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Random Phase Approximation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_HL">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 4 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Hedin &amp; Lundqvist </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_GL">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 5 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Gunnarson &amp; Lundqvist </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_XALPHA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 6 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Slater Xalpha </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_VWN">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 7 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Vosko, Wilk, &amp; Nussair (5) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_VWN_RPA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 8 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Vosko, Wilk, &amp; Nussair (RPA) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_PZ">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 9 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew &amp; Zunger </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_PZ_MOD">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 10 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew &amp; Zunger (Modified) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_OB_PZ">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 11 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Ortiz &amp; Ballone (PZ) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_PW">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 12 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew &amp; Wang </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_PW_MOD">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 13 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew &amp; Wang (Modified) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_OB_PW">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 14 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Ortiz &amp; Ballone (PW) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_2D_AMGB">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 15 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Attacalite et al </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_2D_PRM">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 16 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Pittalis, Rasanen &amp; Marques correlation in 2D </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_vBH">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 17 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> von Barth &amp; Hedin </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_1D_CSC">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 18 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Casula, Sorella, and Senatore 1D correlation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_ML1">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 22 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Modified LSD (version 1) of Proynov and Salahub </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_ML2">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 23 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Modified LSD (version 2) of Proynov and Salahub </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_GOMBAS">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 24 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Gombas parametrization </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_PW_RPA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 25 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew &amp; Wang fit of the RPA </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_1D_LOOS">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 26 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> P-F Loos correlation LDA </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_RC04">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 27 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Ragot-Cortona </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_VWN_1">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 28 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Vosko, Wilk, &amp; Nussair (1) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_VWN_2">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 29 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Vosko, Wilk, &amp; Nussair (2) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_VWN_3">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 30 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Vosko, Wilk, &amp; Nussair (3) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_LDA_C_VWN_4">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 31 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Vosko, Wilk, &amp; Nussair (4) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_OP_XALPHA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 84 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> one-parameter progressive functional (G96 version) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_OP_G96">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 85 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> one-parameter progressive functional (G96 version) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_OP_PBE">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 86 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> one-parameter progressive functional (PBE version) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_OP_B88">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 87 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> one-parameter progressive functional (B88 version) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_FT97">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 88 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Filatov &amp; Thiel correlation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_SPBE">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 89 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> PBE correlation to be used with the SSB exchange </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_REVTCA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 99 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Tognetti, Cortona, Adamo (revised) </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_TCA">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 100 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Tognetti, Cortona, Adamo </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_PBE">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 130 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew, Burke &amp; Ernzerhof correlation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_LYP">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 131 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Lee, Yang &amp; Parr </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_P86">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 132 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew 86 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_PBE_SOL">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 133 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew, Burke &amp; Ernzerhof correlation SOL </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_PW91">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 134 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Perdew &amp; Wang 91 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_AM05">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 135 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Armiento &amp; Mattsson 05 correlation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_XPBE">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 136 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> xPBE reparametrization by Xu &amp; Goddard </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_LM">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 137 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Langreth and Mehl correlation </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_PBE_JRGX">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 138 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> JRGX reparametrization by Pedroza, Silva &amp; Capelle </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_RGE2">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 143 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Regularized PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_WL">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 147 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Wilson &amp; Levy </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_WI">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 148 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Wilson &amp; Ivanov </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_SOGGA11">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 152 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Second-order generalized gradient approximation 2011 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_WI0">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 153 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Wilson &amp; Ivanov initial version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_SOGGA11_X">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 159 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> To be used with hyb_gga_x_SOGGA11-X </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_APBE">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 186 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> mu fixed from the semiclassical neutral atom </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                   <xs:enumeration value="XC_GGA_C_OPTC">
+                     <xs:annotation>
+                       <xs:appinfo>
+                         <oldnr> 200 </oldnr>
+                       </xs:appinfo>
+                       <xs:documentation> Optimized correlation functional of Cohen and Handy </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute default="none" name="xc" use="optional">
+              <xs:annotation>
+                <xs:documentation> Combined functionals. If set it overrides the exchange and the
+                  correlation attributes.</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="none">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr>0</oldnr>
+                      </xs:appinfo>
+                    </xs:annotation>
+                   </xs:enumeration>
+                  <xs:enumeration value="XC_LDA_XC_TETER93">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 20 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Teter 93 parametrization </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_407P">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 93 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH/407+ </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_P76">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 94 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH p=7/6 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_P14">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 95 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH p=1/4 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97_GGA1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 96 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97 GGA-1 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_A">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 97 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH-A </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_KT2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 146 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Keal and Tozer version 2 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 154 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. 1 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 155 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. 2 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH3">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 156 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. 3 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH4">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 157 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. 4 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_93">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 161 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH functional fitted to 93 molecules </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_120">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 162 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH functional fitted to 120 molecules </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_147">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 163 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH functional fitted to 147 molecules </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_HCTH_407">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 164 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HCTH functional fitted to 407 molecules </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_EDF1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 165 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Empirical functionals from Adamson, Gill, and Pople </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_XLYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 166 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> XLYP functional </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 167 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97_1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 168 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97-1 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97_2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 169 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97-2 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97_D">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 170 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Grimme functional to be used with C6 vdW term </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97_K">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 171 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Boese-Martin for Kinetics </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_B97_3">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 172 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97-3 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_PBE1W">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 173 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Functionals fitted for water </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_MPWLYP1W">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 174 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Functionals fitted for water </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_PBELYP1W">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 175 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Functionals fitted for water </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_SB98_1a">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 176 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 1a </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_SB98_1b">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 177 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 1b </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_SB98_1c">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 178 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 1c </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_SB98_2a">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 179 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 2a </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_SB98_2b">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 180 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 2b </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_SB98_2c">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 181 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 2c </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_MOHLYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 194 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Functional for organometallic chemistry </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_MOHLYP2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 195 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Functional for barrier heights </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH_FL">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 196 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. FL </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH_FC">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 197 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. FC </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH_FCFO">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 198 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. FCFO </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_GGA_XC_TH_FCO">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 199 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Tozer and Handy v. FCO </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B3PW91">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 401 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> The original (ACM) hybrid of Becke </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B3LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 402 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> The (in)famous B3LYP </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B3P86">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 403 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Perdew 86 hybrid similar to B3PW91 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_O3LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 404 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> hybrid using the optx functional </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_mPW1K">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 405 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> mixture of mPW91 and PW91 optimized for kinetics </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_PBEH">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 406 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> aka PBE0 or PBE1PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B97">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 407 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B97_1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 408 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97-1 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B97_2">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 410 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97-2 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_X3LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 411 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> maybe the best hybrid </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B1WC">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 412 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 1-parameter mixture of WC and PBE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B97_K">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 413 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Boese-Martin for Kinetics </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B97_3">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 414 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 97-3 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_MPW3PW">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 415 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> mixture with the mPW functional </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B1LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 416 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 1-parameter mixture of B88 and LYP </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_B1PW91">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 417 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 1-parameter mixture of B88 and PW91 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_mPW1PW">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 418 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke 1-parameter mixture of mPW91 and PW91 </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_MPW3LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 419 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> mixture of mPW and LYP </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_SB98_1a">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 420 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 1a </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_SB98_1b">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 421 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 1b </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_SB98_1c">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 422 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 1c </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_SB98_2a">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 423 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 2a </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_SB98_2b">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 424 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 2b </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_SB98_2c">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 425 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Schmider-Becke 98 parameterization 2c </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+		  <!-- Range seperated / screened functionals currently not implemented-->
+                  <!--xs:enumeration value="XC_HYB_GGA_XC_HSE03">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 427 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> the 2003 version of the screened hybrid HSE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_HSE06">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 428 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> the 2006 version of the screened hybrid HSE </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_HJS_PBE">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 429 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS hybrid screened exchange PBE version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_HJS_PBE_SOL">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 430 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS hybrid screened exchange PBE_SOL version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_HJS_B88">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 431 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS hybrid screened exchange B88 version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_HJS_B97X">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 432 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> HJS hybrid screened exchange B97x version </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_CAM_B3LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 433 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> CAM version of B3LYP </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_TUNED_CAM_B3LYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 434 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> CAM version of B3LYP tunes for excitations </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration-->
+                  <xs:enumeration value="XC_HYB_GGA_XC_BHANDH">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 435 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke half-and-half </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_BHANDHLYP">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 436 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> Becke half-and-half with B88 exchange </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                  <xs:enumeration value="XC_HYB_GGA_XC_MB3LYP_RC04">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldnr> 437 </oldnr>
+                      </xs:appinfo>
+                      <xs:documentation> B3LYP with RC04 LDA </xs:documentation>
+                    </xs:annotation>
+                  </xs:enumeration>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element ex:importance="experimental" ex:unit="" name="xsLO" minOccurs="0" maxOccurs="1">
+          <xs:annotation><xs:documentation>
+            Generate extra local orbitals for accurate description of the unoccupied states.
+          </xs:documentation></xs:annotation>                 
+          <xs:complexType>
+            <xs:attribute ex:importance="expert" ex:unit="Hartree" name="emax" type="fortrandouble" default="30">
+              <xs:annotation><xs:documentation>
+                Energy cutoff for generating excited-states local orbitals.
+              </xs:documentation></xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="lmax" type="xs:integer" default="4">
+              <xs:annotation><xs:documentation>
+                Angular momentum cutoff for generating excited-states local orbitals.
+              </xs:documentation></xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="maxnodes" type="xs:integer" default="10">
+              <xs:annotation><xs:documentation>
+                Maximum number of local orbitals per l-channel.
+              </xs:documentation></xs:annotation>
+            </xs:attribute>
+            
+          </xs:complexType>
+        </xs:element>
+
+      </xs:all>
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="vdWcorrection"  default="none">
+	<xs:annotation>		
+	  <xs:documentation>
+	    Adds dispersion (van-der-Waals) correction to total energy after the last SCF iteration. If forces are calculated, an appropriate dispersion correction is applied. Available methods are
+	    <list>
+	    <li><pre>"DFTD2"</pre>: This is the <bf>DFT-D2</bf> method by Stefan Grimme which is introduced in <it>Semiempirical GGA-type density functional constructed with a long-range dispersion correction</it>, J. Comput. Chem. <bf>27</bf>, 1787-1799 (2006).</li>
+	    <li><pre>"TSvdW"</pre>: This is the <bf>TS-vdW</bf> method by Alexandre Tkatchenko and Matthias Scheffler introduced in <it>Accurate molecular van-der-Waals interactions from ground-state electron density and free-atom reference data</it>, Phys. Rev. Lett. <bf>102</bf>, 073005 (2009).</li>
+	  </list>
+	  Parameters corresponding to each method can be specified using the subelements <elementref>DFTD2parameters</elementref> and <elementref>TSvdWparameters</elementref> inside the element <elementref>groundstate</elementref>.
+	  It is also possible to decouple these van-der-Waals corrections from a complete ground-state calculation. In this case, you can use the subelements <elementref>DFTD2</elementref> and <elementref>TSvdW</elementref> inside the element <elementref>properties</elementref>.
+	  </xs:documentation>
+	</xs:annotation>
+	<xs:simpleType>
+	  <xs:restriction base="xs:string">
+	    <xs:enumeration value="none"/>
+	    <xs:enumeration value="DFTD2"/>
+	    <xs:enumeration value="TSvdW"/>
+	  </xs:restriction>
+	</xs:simpleType>
+      </xs:attribute>
+      
+      <xs:attribute ex:importance="expert" ex:unit="" name="do" default="fromscratch">
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>nonreplace</oldname>
+          </xs:appinfo>
+          <xs:documentation> Decides if the ground state is calculated starting from scratch, using
+            the densities from file, or if its calculation is skipped and only the associated input parameters are
+            read in.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="fromscratch"/>
+            <xs:enumeration value="fromfile"/>
+            <xs:enumeration value="skip"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="ngridk" type="integertriple"
+        use="optional" default="1 1 1" >
+        <xs:annotation>
+          <xs:appinfo>
+            <oldname>ngridk</oldname>
+          </xs:appinfo>
+            <xs:documentation>Number of k grid points along the basis vector
+            directions. Alternatively give <attref>autokpt</attref> and <attref>radkpt</attref>,
+            or <attref>nktot</attref>. In the latter cases any value given for <attref>ngridk</attref>
+            is not used. Notes: Phonon calculations using supercells adjust the k-grid
+            according to the supercell size; if the element <elementref>xs</elementref>
+            is given, the present attribute is overwritten by the value in <elementref>xs</elementref>
+            for xs-related groundstate calculations; the values of the present attribute are also
+            relevant for calculations related to the element <elementref>gw</elementref>.  </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="rgkmax" type="fortrandouble"
+        default="7.0d0">
+        <xs:annotation>
+          <xs:documentation> The parameter <attref>rgkmax</attref> implicitly determines the number of
+            basis functions and is one of the crucial parameters for the accuracy of the
+            calculation. It represents the product of two quantities: <inlinemath>R_{MT,\,
+              Min}</inlinemath>, the smallest of all muffin-tin radii, and <inlinemath>|{ \bf G}+{
+              \bf k}|_{max}</inlinemath>, the maximum length for the <inlinemath>{ \bf G}+{ \bf
+              k}</inlinemath>  vectors. Because each <inlinemath>{ \bf G}+{ \bf k}</inlinemath> 
+            vector represents one basis function, <attref>rgkmax</attref> gives the number of basis
+            functions used for solving the Kohn-Sham equations. Typical values of <attref>rgkmax</attref>
+            are between 6 and 9. However, for systems with very short bond-lengths, significantly
+            smaller values may be sufficient. This may especially be the case for materials
+            containing carbon, where <attref>rgkmax</attref> may be 4.5-5, or hydrogen, where even values
+            between 3 and 4 may be sufficient. In any case, a convergence check is indispensible for
+            a proper choice of this parameter for your system! </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="epspot" type="fortrandouble"
+        use="optional" default="1.0d-6">
+        <xs:annotation>
+          <xs:documentation> If the RMS change in the effective potential and magnetic field is
+            smaller than <attref>epspot</attref>, then the self-consistent loop is considered converged
+            and exited. For structural optimization runs this results in the forces being
+            calculated, the atomic positions updated and the loop restarted. See also
+              <attref>maxscl</attref>. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="epsengy" type="fortrandouble"
+        use="optional" default="1.0d-6">
+        <xs:annotation>
+          <xs:documentation>Energy convergence tolerance.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="epsforcescf" type="fortrandouble" 
+                    use="optional" default="5.0d-5">
+        <xs:annotation>
+          <xs:documentation>Convergence tolerance for forces (not including IBS contribution) 
+	    during the SCF run.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+
+      <xs:attribute ex:importance="essential" ex:unit="Hartree" name="swidth" type="fortrandouble"
+        default="0.001d0">
+        <xs:annotation>
+          <xs:documentation>Width of the smooth approximation to the Dirac delta function (must be
+            greater than zero).</xs:documentation>
+          <xs:appinfo>
+            <olddefault default="0.01d0"/>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="stype" default="Gaussian">
+        <xs:annotation>
+          <xs:documentation> A smooth approximation to the Dirac delta function is needed to compute
+            the occupancies of the Kohn-Sham states. The attribute <attref>swidth</attref> determines the
+            width of the approximate delta function. </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Gaussian">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>0</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Methfessel-Paxton 1">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>1</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Methfessel-Paxton 2">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>2</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Fermi Dirac">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>3</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Square-wave impulse">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>4</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="libbzint">
+              <xs:annotation>
+              <xs:appinfo>
+                <oldnr>-1</oldnr>
+              </xs:appinfo>
+              <xs:documentation>
+              Extended linear tetrahedron method (LIBBZINT library) 
+              is used for k-point generation and integration (experimental option).
+              </xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="findlinentype" default="Wigner_Seitz">
+        <xs:annotation>
+          <xs:documentation>Select method to determine the linearisation
+            energies.</xs:documentation>
+          <xs:appinfo>
+            <olddefault default="Wigner_Seitz"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Wigner_Seitz"/>
+            <xs:enumeration value="lcharge"/>
+            <xs:enumeration value="logderiv"/>
+            <xs:enumeration value="no_search"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="fermilinengy" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> If <pre>"true"</pre> the linearization energies marked as non-varying
+            are set to the Fermi level plus <attref>dlinengyfermi</attref>. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="modifiedsv" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> If <pre>"true"</pre>, the construction of the second-variational 
+            hamiltonian involves wavefunctions in the basis representation and wavefunctions
+            are not evaluated explicitly. Otherwise, the usual second-variational procedure 
+            is used. The first of the two approaches is generally recommended, but it is not
+            implemented for non-collinear and LDA+U calculations.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="isgkmax" type="xs:integer" default="-1">
+        <xs:annotation>
+          <xs:documentation>Species for which the muffin-tin radius will be used for calculating
+            gkmax.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="gmaxvr" type="fortrandouble"
+        default="12.0d0">
+        <xs:annotation>
+          <xs:documentation>Maximum length of |G| for expanding the interstitial density and
+            potential.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="nempty" type="xs:integer" default="5">
+        <xs:annotation>
+          <xs:documentation> Defines the number of eigenstates beyond that required for charge
+            neutrality. When running metals it is not known <it>a priori</it> how many states will
+            be below the Fermi energy for each <bf>k</bf>-point. Setting <attref>nempty</attref> greater
+            than zero allows the additional states to act as a buffer in such cases. Furthermore,
+            magnetic calculations use the first-variational eigenstates as a basis for setting up
+            the second-variational Hamiltonian, and thus <attref>nempty</attref> will determine the size
+            of this basis set. Convergence with respect to this quantity should be checked.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="nosym" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:documentation> When set to <pre>"true"</pre> no symmetries, apart from the identity,
+            are used anywhere in the code. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" ref="symmorph" default="false">
+        <xs:annotation>
+          <xs:documentation> When set to <pre>"true"</pre> only symmorphic space-group operations
+            are to be considered, i.e. only symmetries without non-primitive translations are used
+            anywhere in the code. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="frozencore" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> When set to <pre>"true"</pre> the frozen core approximation is applied,
+            i.e., the core states are fixed to the atomic states. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="autokpt" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation>If  <pre>"true"</pre>, the set of <bf>k</bf>-points is determined
+          automatically according to <attref>radkpt</attref>.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="radkpt" type="fortrandouble"
+        default="40.0d0">
+        <xs:annotation>
+          <xs:documentation> Used for the automatic determination of the <bf>k</bf>-point mesh. If
+            <attref>autokpt</attref> is set to <pre>"true"</pre> then the mesh sizes will be determined by
+              <inlinemath>n_i=\lambda/|{ \bf A}_i|+1</inlinemath>. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="nktot" type="xs:integer" default="0">
+        <xs:annotation>
+          <xs:documentation> Used for the automatic determination of the <inlinemath>{\mathbf k}</inlinemath>-point mesh from the total
+            number of <bf nospace="true">k</bf>-points. If <attref>nktot</attref> is set, then the mesh
+            will be determined in such a way that the number of <bf>k</bf>-points is proportional to
+            the length of the reciprocal lattice vector in each direction and that the total number
+            of <bf nospace="true">k</bf>-points is less than or equal to <attref>nktot</attref>.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="reducek" type="xs:boolean"
+        default="true">
+        <xs:annotation>
+          <xs:documentation> If the attribute <attref>reducek</attref> is <pre>"true"</pre> the
+              <inlinemath> \bf{k} </inlinemath>-point set is reduced with the crystal symmetries.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" ref="tfibs" default="true">
+        <xs:annotation>
+          <xs:documentation> Because calculation of the incomplete basis set (IBS) correction to the
+            force is fairly time- consuming, it can be switched off by setting tfibs to
+            <pre>"false"</pre> This correction can then be included only when necessary, i.e. when
+            the atoms are close to equilibrium in a structural relaxation run. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" ref="tforce" default="false">
+        <xs:annotation>
+          <xs:documentation>Decides if the force should be calculated at the end of the
+            self-consistent cycle.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxapw" type="xs:integer" default="8">
+        <xs:annotation>
+          <xs:documentation>Angular momentum cut-off for the APW functions.</xs:documentation>
+          <xs:appinfo>
+            <olddefault default="8"/>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="maxscl" type="xs:integer"
+        default="200">
+        <xs:annotation>
+          <xs:documentation>Upper limit for the self-consistency loop.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="niterconvcheck" type="xs:integer"
+        default="2">
+	<xs:annotation>
+	  <xs:documentation>Number of self-consistency iterations over which to test convergence. 
+	  For example, if <attref>niterconvcheck</attref>=2, then both the second and third to last
+	  iterations are compared to the last one to check convergence. The convergence criteria
+	  used are those set up by <attref>scfconv</attref>. 
+	  </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="chgexs" type="fortrandouble"
+        default="0.0d0">
+        <xs:annotation>
+          <xs:documentation> This controls the amount of charge in the unit cell beyond that
+            required to maintain neutrality. It can be set positive or negative depending on
+            whether electron or hole doping is required.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="deband" type="fortrandouble"
+        default="0.0025d0">
+        <xs:annotation>
+          <xs:documentation> Initial band energy step size The initial step length used when
+            searching for the band energy, which is used as the APW linearisation energy. This is
+            done by first searching upwards in energy until the radial wave-function at the
+            muffin-tin radius is zero. This is the energy at the top of the band, denoted
+              <inlinemath>E_{\rm t}</inlinemath>. A downward search is now performed from
+              <inlinemath>E_{\rm t}</inlinemath> until the slope of the radial wave-function at the
+            muffin-tin radius is zero. This energy, <inlinemath>E_{\rm b}</inlinemath>, is at the
+            bottom of the band. The band energy is taken as <inlinemath>(E_{\rm t}+E_{\rm
+              b})/2</inlinemath>. If either <inlinemath>E_{\rm t}</inlinemath> or <inlinemath>E_{\rm
+              b}</inlinemath> cannot be found then the band energy is set to the default value.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="epsband" type="fortrandouble"
+        default="1.0d-6">
+        <xs:annotation>
+          <xs:documentation>Energy tolerance for search of linearisation
+            energies.</xs:documentation>
+          <xs:appinfo>
+            <oldname>none</oldname>
+            <olddefault default="1.0d-5"/>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Hartree" name="dlinengyfermi"
+        type="fortrandouble" default="-0.1d0">
+        <xs:annotation>
+          <xs:documentation>Energy difference between linearisation and Fermi
+            energy.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="epschg" type="fortrandouble"
+        default="1.0d-5">
+        <xs:annotation>
+          <xs:documentation>Convergence criterion for the maximum allowed error 
+           in the calculated total charge beyond which a warning message will be issued.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="epsocc" type="fortrandouble"
+        default="1.0d-8">
+        <xs:annotation>
+          <xs:documentation>smallest occupancy for which a state will contribute to the
+            density.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="mixer" default="msec">
+        <xs:annotation>
+          <xs:documentation>
+          Select the mixing (relaxation) scheme for the SCF loop. One has the following options:
+         <p/>
+        <bf>Linear mixer</bf> (<pre>"lin"</pre>):
+        <p/>
+   Given the input  <inlinemath>\mu^i</inlinemath> and output   <inlinemath>\nu^i</inlinemath> 
+   vectors of the <inlinemath>i</inlinemath>th
+  iteration,  the next input vector to the
+    (<inlinemath>i+1</inlinemath>)th iteration is generated using an adaptive mixing scheme.
+    The <inlinemath>j</inlinemath>th component of the output
+   vector is mixed with a fraction of the same component of the input vector:
+   <displaymath>\mu^{i+1}_j=\beta^i_j\nu^i_j+(1-\beta^i_j)\mu^i_j, </displaymath>
+   where <inlinemath>\beta^i_j</inlinemath> is set to <inlinemath>\beta_0</inlinemath> at initialisation and increased by
+   scaling with <inlinemath>\beta_{\rm inc}</inlinemath> (<inlinemath>>1</inlinemath>) if <inlinemath>f^i_j\equiv\nu^i_j-\mu^i_j</inlinemath> does
+   not change sign between loops. If <inlinemath>f^i_j</inlinemath> does change sign, then <inlinemath>\beta^i_j</inlinemath>
+   is scaled by <inlinemath>\beta_{\rm dec}</inlinemath> (<inlinemath>>1</inlinemath>).
+          <p/> 
+          <bf>Multisecant Broyden potential mixing</bf> (<pre>"msec"</pre>)
+          <p/>
+          <bf>Pulay mixing</bf> (<pre>"pulay"</pre>):
+          <p/>
+          Pulay's mixing scheme which uses direct inversion in the iterative subspace (DIIS). See <it>Chem. Phys. Lett.</it> <bf>73</bf>, 393 (1980).
+          </xs:documentation>
+          <xs:appinfo>
+            <oldname>mixtype</oldname>
+            <olddefault default="lin"/>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lin">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>1</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="msec">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>2</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="pulay">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>3</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="mixerswitch" type="xs:integer" default="1">
+        <xs:annotation>
+          <xs:documentation>Switch between potential (1) and density (2) mixing.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="msecStoredSteps" type="xs:integer"
+        default="8">
+        <xs:annotation>
+          <xs:documentation> How many potentials from previous steps to store. 
+           Used in msec mixing as choosen with <attref>mixer</attref>.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="PrelimLinSteps" type="xs:integer"
+        default="2">
+        <xs:annotation>
+          <xs:documentation> After which SCF iteration is msec mixing supposed to be turned on.
+           Until then linear mixing is applied.
+           Used in msec mixing as choosen with <attref>mixer</attref>.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="beta0" type="fortrandouble"
+        default="0.4d0">
+        <xs:annotation>
+          <xs:documentation>Initial value for mixing parameter. Used in linear
+            mixing as choosen with <attref>mixer</attref>.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="betainc" type="fortrandouble"
+        default="1.1d0">
+        <xs:annotation>
+          <xs:documentation>Mixing parameter increase. Used in linear mixing.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="betadec" type="fortrandouble"
+        default="0.6d0">
+        <xs:annotation>
+          <xs:documentation>Mixing parameter decrease. Used in linear mixing.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lradstep" type="xs:integer" default="1">
+        <xs:annotation>
+          <xs:documentation> Some muffin-tin functions (such as the density) are calculated on a
+            coarse radial mesh and then interpolated onto a fine mesh. This is done for the sake of
+            efficiency. lradstp defines the step size in going from the fine to the coarse radial
+            mesh. If it is too large, loss of precision may occur.</xs:documentation>
+          <xs:appinfo>
+            <oldname>lradstp</oldname>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lorecommendation" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:documentation> Local orbitals may be used for improving unoccupied states. But what 
+                             energy parameters to use? Set this parameter to true, and you will get
+                             a list of energies at which the radial wavefunction turns to zero on the 
+                             muffin-tin sphere. These energies are calculated using atomic potential, 
+                             and to make them transferable to a general system, use the average of two
+                             consecutive atomic energies.
+          </xs:documentation>
+          <xs:appinfo>
+            <oldname>lradstp</oldname>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="radialgridtype" type="xs:string" default="cubic">
+        <xs:annotation>
+          <xs:documentation> The parameter defines a functional form how radial-grid points are distributed.
+                             Choose from "cubic", "exponential" and "expocubic". "cubic" is the most suitable
+                             one for a majority of calculations, but switch to "expocubic" if you set the 
+                             innermost grid point very close to a nucleus.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="nprad" type="xs:integer" default="4">
+        <xs:annotation>
+          <xs:documentation>(Obsolete) Order of predictor-corrector polynomial.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="xctype" default="GGA_PBE">
+        <xs:annotation>
+          <xs:documentation> Type of exchange-correlation functional to be used <list>
+              <li> No exchange-correlation funtional ( <inlinemath>E_{\rm xc}\equiv 0</inlinemath> ) </li>
+              <li> LDA, Perdew-Zunger/Ceperley-Alder, <it>Phys. Rev. B</it>
+                <bf>23</bf>, 5048 (1981) </li>
+              <li> LSDA, Perdew-Wang/Ceperley-Alder, <it>Phys. Rev. B</it>
+                <bf>45</bf>, 13244 (1992) </li>
+              <li> LDA, X-alpha approximation, J. C. Slater, <it>Phys. Rev.</it>
+                <bf>81</bf>, 385 (1951) </li>
+              <li> LSDA, von Barth-Hedin, <it>J. Phys. C</it>
+                <bf>5</bf>, 1629 (1972) </li>
+              <li> GGA, Perdew-Burke-Ernzerhof (PBE), <it>Phys. Rev. Lett.</it>
+                <bf>77</bf>, 3865 (1996) </li>
+              <li> GGA, Revised PBE, Zhang-Yang, <it>Phys. Rev. Lett.</it>
+                <bf>80</bf>, 890 (1998) </li>
+              <li> GGA, PBEsol, arXiv:0707.2088v1 (2007) </li>
+              <li> GGA, asymptotically corrected PBE  (acPBE), arXiv:1409.4834 (2014) </li> 
+              <li> GGA, Wu-Cohen exchange (WC06) with PBE correlation, <it>Phys. Rev. B</it>
+                <bf>73</bf>, 235116 (2006) </li>
+              <li> GGA, Armiento-Mattsson (AM05) spin-unpolarised functional, <it>Phys. Rev. B</it>
+                <bf>72</bf>, 085108 (2005) </li>
+              <li> EXX, Exact Exchange, <it>Phys. Rev. Lett.</it>
+                <bf>95</bf>, 136402 (2005) </li>
+              <li> Hybrid, PBE0, <it>J. Chem. Phys.</it> <bf>110</bf>, 5029 (1999)</li>
+            </list>
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="LDA_PZ">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>2</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LDA_PW">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>3</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LDA_XALPHA">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>4</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LDA_vBH">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>5</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GGA_PBE">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>20</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GGA_PBE_R">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>21</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GGA_PBE_SOL">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>22</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GGA_WC">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>26</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GGA_AM05">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>30</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="GGA_AC_PBE">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>300</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="HYB_PBE0">
+               <xs:annotation>
+                 <xs:appinfo>
+                   <oldnr>406</oldnr>
+                 </xs:appinfo>
+               </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="HYB_LDA0">
+               <xs:annotation>
+                 <xs:appinfo>
+                   <oldnr>407</oldnr>
+                 </xs:appinfo>
+               </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="EXX">
+              <xs:annotation>
+                <xs:appinfo><!-- set to "-2" or lower for EXX -->
+                  <oldnr>-1</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="none">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>1</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="ldapu" default="none">
+        <xs:annotation>
+          <xs:documentation>Type of LDA+U method to be used.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="none">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>0</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="FullyLocalisedLimit">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>1</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="AroundMeanField">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>2</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="FFL-AMF-interpolation">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldnr>3</oldnr>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxvr" type="xs:integer" default="8">
+        <xs:annotation>
+          <xs:documentation>Angular momentum cut-off for the muffin-tin density and
+            potential.</xs:documentation>
+          <xs:appinfo>
+            <olddefault default="7"/>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="fracinr" type="fortrandouble"
+        default="0.02d0">
+        <xs:annotation>
+          <xs:documentation>Fraction of the muffin-tin radius up to which lmaxinr is used as the
+            angular momentum cut-off.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxinr" type="xs:integer" default="2">
+        <xs:annotation>
+          <xs:documentation> Close to the nucleus, the density and potential is almost spherical and
+            therefore the spherical harmonic expansion can be truncated a low angular momentum. See
+            also <attref>fracinr</attref>. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="lmaxmat" type="xs:integer" default="8">
+        <xs:annotation>
+          <xs:documentation>Angular momentum cut-off for the outer-most loop in the hamiltonian and
+            overlap matrix setup.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+            <xs:attribute ex:importance="expert" ex:unit="" name="ValenceRelativity" default="zora">
+              <xs:annotation>
+                <xs:documentation>Relativistic Hamiltonian to use in groundstate calculations. 
+                <list>
+                    <li>none   - solves non-relativistic Schoedinger equation (SE) </li>
+                    <li>zora   - solves scalar-relativistic SE within zero-order regular approximation (ZORA) </li>
+                    <li>iora*  - solves scalar-relativistic SE within infinite-order regular approximation (IORA), the small component is neglected </li>
+                    <li>iora   - solves scalar-relativistic SE within infinite-order regular approximation (IORA), the small component is included  </li>
+                    <li>kh*    - solves scalar-relativistic SE for the large component, the small component is neglected  </li> 
+                    <li>kh     - solves scalar-relativistic SE for the large component, the small component is included  </li>
+                </list>
+                       iora, kh* and kh are implemented only for atoms.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="zora"/>
+                  <xs:enumeration value="iora*"/>
+                  <xs:enumeration value="iora"/>
+                  <xs:enumeration value="kh*"/>
+                  <xs:enumeration value="kh"/>
+                  <xs:enumeration value="none"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="" name="CoreRelativity" default="dirac">
+              <xs:annotation>
+                <xs:documentation>Chooses between relativistic/non-relativistic descriptions for core electrons. Pick either "dirac" or "none".
+                </xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:enumeration value="dirac"/>
+                  <xs:enumeration value="none"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="energyref" type="fortrandouble"
+        default="0.0d0">
+        <xs:annotation>
+          <xs:documentation> Energy reference <inlinemath>\varepsilon_\textrm{ref}</inlinemath> 
+                             for the scalar-relativistic ZORA. It enters the kinetic energy expression 
+                             <inlinemath>T=\mathbf{p}\frac{c^2}{2c^2+\varepsilon-v(\mathbf{r})}\mathbf{p}</inlinemath>.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="SymmetricKineticEnergy" type="xs:boolean" default="true">
+        <xs:annotation>
+          <xs:documentation> If <pre>"true"</pre>, the kinetic-energy matrix elements of muffin-tin functions are calculated by applying gradient to both bra and ket.
+           Otherwise, the whole kinetic-energy operator is applied to ket only, and the surface-term correction is applied to make the hamiltonian hermitian.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="ExplicitKineticEnergy" type="xs:boolean" default="true">
+        <xs:annotation>
+          <xs:documentation> 
+            If true, the kinetic energy expectation values are calculated explicitly and, then, they are used for calculating the total energy.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+
+
+
+      <xs:attribute ex:importance="expert" ex:unit="" name="vkloff" type="vect3d"
+        default="0.0d0 0.0d0 0.0d0">
+        <xs:annotation>
+          <xs:documentation>The <inlinemath>{\mathbf k}</inlinemath>-point offset vector in lattice coordinates.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="npsden" type="xs:integer" default="9">
+        <xs:annotation>
+          <xs:documentation>Order of polynomial for pseudo-charge density.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="cfdamp" type="fortrandouble"
+        default="0.0d0">
+        <xs:annotation>
+          <xs:documentation>Damping coefficient for characteristic function.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="nosource" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> When set to <pre>"true"</pre>, source fields are projected out of the
+            exchange-correlation magnetic field. experimental feature. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="tevecsv" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> The attribute tevecsv is <pre>"true"</pre> if second-variational
+            eigenvectors are calculated. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="tpartcharges" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:documentation> The attribute tpartcharges is <pre>"true"</pre> if partial charges 
+          for each state j, atom alpha and for each lm combination are calculated. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>   
+      <xs:attribute ex:importance="expert" ex:unit="" name="nwrite" type="xs:integer" default="0">
+        <xs:annotation>
+          <xs:documentation> Normally, the density and potentials are written to the file STATE.OUT
+            only after completion of the self-consistent loop. By setting nwrite to a positive
+            integer the file will be written during the loop every nwrite
+            iterations.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="ptnucl" type="xs:boolean" default="true">
+        <xs:annotation>
+          <xs:documentation> The attrubute ptnucl is <pre>"true"</pre> if the nuclei are to be
+            treated as point charges, if <pre>"false"</pre> the nuclei have a finite spherical
+            distribution. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="essential" ex:unit="" name="scfconv" type="xs:string" use="optional" default="multiple">
+         <xs:annotation>
+              <xs:documentation>
+              Specify the SCF convergence criteria
+              <list>
+                <li>"energy"    - only the total energy of the system is used as a convergence criterion. 
+		     If the calculation of the atomic forces is required 
+		     (e.g., in the optimization of the atomic positions) the non-IBS contribution 
+		     to the atomic forces is added as a further convergence criterion.</li>
+                <li>"potential" - only the Kohn-Sham potential is used as a convergence criterion. 
+		     If atomic forces are required the convergence criterion is extended 
+		     to include non-IBS forces. </li>
+                <li>"multiple"  - total energy, Kohn-Sham potential, and total electronic charge of the system 
+		     are used as convergence criteria. 
+		     If atomic forces are required the convergence criterion 
+		     is extended to include non-IBS forces.</li> 
+              </list>
+              </xs:documentation>
+          </xs:annotation>
+       </xs:attribute>
+       
+      <xs:attribute ex:importance="expert" ex:unit="" name="dipolecorrection" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:documentation> 
+            If <pre>"true"</pre>, the dipole correction is applied for slabs oriented 
+	    along the <inlinemath>z</inlinemath>-direction.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      
+      <xs:attribute ex:importance="expert" ex:unit="" name="dipoleposition" type="fortrandouble" default="1.0d0">
+        <xs:annotation>
+          <xs:documentation> 
+	    The value of this attribute indicates the position of the jump in electrostatic potential, 
+	    after the compensating potential (<it>i.e.</it>, the dipole correction) is applied. 
+	    The position is given as a fractional coordinate in the vertical direction. 
+	    Please note that this jump position should be located within the vacuum region enough 
+	    far away from the atomic layers, otherwise the compensating potential cannot be 
+	    correctly applied. It is recommended to put the jump position at the middle of 
+	    the vacuum layer.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+ 
+          <!--xs:attribute ex:importance="expert" ex:unit="" name="tconvcritenergy" type="xs:boolean" default="true">
+            <xs:annotation>
+              <xs:documentation> The attribute tconvcritenergy is <pre>"true"</pre> if the value  
+              of the total energy of the system is used as a convergence criterion for the 
+              self-consistent procedure used to solve the Kohn-Sham equations. By default,
+              this is the only used convergence criterion (exception: in LDA+U and OEP calculations,
+              the Kohn-Sham potential is automatically chosen instead). </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>    
+          <xs:attribute ex:importance="expert" ex:unit="" name="tconvcritvks" type="xs:boolean" default="false">
+            <xs:annotation>
+              <xs:documentation> The attribute tconvcritvks is <pre>"true"</pre> if the value  
+              of the Kohn-Sham potential ($V_{KS}$) of the system is used as a convergence criterion for the 
+              self-consistent procedure used to solve the Kohn-Sham equations. For LDA+U and OEP calculations, this is
+              the (automatically chosen) convergence criterion. </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>  
+          <xs:attribute ex:importance="expert" ex:unit="" name="tconvcritcharge" type="xs:boolean" default="false">
+            <xs:annotation>
+              <xs:documentation> The attribute tconvcritcharge is <pre>"true"</pre> if the value  
+              of the total charge of the system is used as a convergence criterion for the 
+              self-consistent procedure used to solve the Kohn-Sham equations. (This amount should be
+              constant, but it is subject to numerical errors) </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>  
+          <xs:attribute ex:importance="expert" ex:unit="" name="tconvcritforces" type="xs:boolean" default="false">
+            <xs:annotation>
+              <xs:documentation> The attribute tconvcritforces is <pre>"true"</pre> if the value  
+              of the an average of forces on nuclei of the system is used as a convergence criterion for the 
+              self-consistent procedure used to solve the Kohn-Sham equations. </xs:documentation>
+            </xs:annotation>
+          </xs:attribute-->
+          
+          <xs:attribute ex:importance="expert" ex:unit="" name="outputlevel" default="normal">
+            <xs:annotation>
+              <xs:documentation> 
+                Specify amount of information which is printed to files:
+                <list>
+                    <li>none   - no output is produced</li>
+                    <li>low    - minimal output is produced</li>
+                    <li>normal - (default) standard information</li>
+                    <li>high   - detailed output</li>
+                </list>
+              </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="none">
+                  <xs:annotation>
+                    <xs:appinfo>
+                      <oldnr>-1</oldnr>
+                    </xs:appinfo>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="low">
+                  <xs:annotation>
+                    <xs:appinfo>
+                      <oldnr>0</oldnr>
+                    </xs:appinfo>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="normal">
+                  <xs:annotation>
+                    <xs:appinfo>
+                      <oldnr>1</oldnr>
+                    </xs:appinfo>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="high">
+                  <xs:annotation>
+                    <xs:appinfo>
+                      <oldnr>2</oldnr>
+                    </xs:appinfo>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+                   
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
