@@ -1,0 +1,348 @@
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ex="http://xml.exciting-code.org/inputschemaextentions.xsd"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xsi:schemaLocation="http://xml.exciting-code.org/inputschemaextentions.xsd    http://xml.exciting-code.org/inputschemaextentions.xsd">
+  <xs:include id="common" schemaLocation="common.xsd"/>
+  <xs:annotation>
+    <xs:appinfo>
+      <parent>/input</parent>
+      <root>structure</root>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element ex:importance="essential" ex:unit="" name="structure">
+    <xs:annotation>
+      <xs:documentation>This element contains all structural information, such as unit-cell
+        parameters as well as type and position of each atom. The presence of the subelement
+          <elementref>species</elementref> is necessary unless one wants to perform an empty-lattice
+        calculation. The attribute <attref>speciespath</attref> must be
+        specified.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ex:importance="essential" ex:unit="" name="crystal" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>Defines the unit cell of the crystal via the 3 basis
+              vectors.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:annotation>
+              <xs:documentation>The unit cell is spanned by 3 base vectors that define the lattice
+                coordinates.</xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+              <xs:element ex:importance="essential" ex:unit="Bohr" name="basevect" minOccurs="3"
+                maxOccurs="3" type="vect3d">
+                <xs:annotation>
+                  <xs:documentation>Defines one basis vector in Cartesian
+                    coordinates.</xs:documentation>
+                  <xs:appinfo>
+                    <oldname>avec</oldname>
+                  </xs:appinfo>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute ex:importance="essential" ex:unit="1" name="scale" type="fortrandouble"
+              default="1.0d0">
+              <xs:annotation>
+                <xs:documentation>Scales all the lattice vectors by the same factor. This is useful
+                  for varying the volume.</xs:documentation>
+                <xs:appinfo>
+                  <oldname>scale</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="essential" ex:unit="" name="stretch" type="vect3d"
+              default="1.0d0 1.0d0 1.0d0 ">
+              <xs:annotation>
+                <xs:documentation> Allows for an individual scaling of each lattice vector
+                  separately. <pre>"1 1 1"</pre> means no scaling. </xs:documentation>
+                <xs:appinfo>
+                  <oldname>(sc1|sc2|sc3)</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ex:importance="essential" ex:unit="" name="species" minOccurs="0"
+          maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>Defines the atomic species, <it>i.e.</it>, the chemical element. Aatomic
+              coordinates and, optionally, quantities relevant for magnetic calculations are defined
+              in the subelement(s) atom.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ex:importance="essential" ex:unit="" name="atom" minOccurs="1"
+                maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>Defines the position and other attributes of one atom in the
+                    unit cell.</xs:documentation>
+                  <xs:appinfo>
+                    <oldname>noname</oldname>
+                  </xs:appinfo>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute ex:importance="essential" ex:unit="lattice coordinates" name="coord"
+                    type="vect3d" use="required">
+                    <xs:annotation>
+                      <xs:documentation>Atom position in lattice coordinates.</xs:documentation>
+                      <xs:appinfo>
+                        <oldname>atposl</oldname>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:attribute>
+
+                  <xs:attribute ex:importance="expert" ex:unit="" name="lockxyz" type="booleantriple"
+                    default="false false false" use="optional">
+                    <xs:annotation>
+                      <xs:documentation>Switches to constrain atomic movement along x/y/z directions.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+
+                  <xs:attribute ex:importance="expert" ex:unit="" name="bfcmt" type="vect3d"
+                    default="0.0d0 0.0d0 0.0d0" use="optional">
+                    <xs:annotation>
+                      <xs:documentation>Muffin-tin external magnetic field in Cartesian
+                        coordinates.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute ex:importance="expert" ex:unit="" name="mommtfix" type="vect3d"
+                    default="0.0d0 0.0d0 0.0d0" use="optional">
+                    <xs:annotation>
+                      <xs:documentation>The desired muffin-tin moment for a Fixed Spin Moment (FSM)
+                        calculation.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ex:importance="expert" ex:unit="" name="LDAplusU" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation> The LADplusU element is used to specify the  J, U, and l
+                    parameters of an atomic species. To switch on the LDAplusU feature one needs to set the
+                      <attref>ldapu</attref> attribute of the groundstate element.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute ex:importance="expert" ex:unit="" name="l" type="xs:integer"
+                    default="-1">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldname>notaname</oldname>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute ex:importance="expert" ex:unit="" name="U" type="fortrandouble"
+                    default="0.0d0">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldname>notaname</oldname>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute ex:importance="expert" ex:unit="" name="J" type="fortrandouble"
+                    default="0.0d0">
+                    <xs:annotation>
+                      <xs:appinfo>
+                        <oldname>notaname</oldname>
+                      </xs:appinfo>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ex:importance="expert" ex:unit="" name="dfthalfparam" minOccurs="0" maxOccurs="1">
+			<xs:annotation>
+				<xs:documentation> This element specifies some of the fundamentals parameters 
+					(for each species) regarding a <bf>DFT-1/2</bf> calculation. 
+					Do not forget to specify the subelement <elementref>dfthalf</elementref> 
+					inside the element <elementref>groundstate</elementref>, otherwise 
+					no <bf>DFT-1/2</bf> correction will be done 
+					(even though you specify the parameters).
+				</xs:documentation>
+			</xs:annotation>
+			<xs:complexType>
+				<xs:sequence>
+					<xs:element ex:importance="essential" ex:unit="" name="shell" minOccurs="1" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation> 
+							  This element specifies the shell to which the <bf>DFT-1/2</bf> correction should be applied to.
+							</xs:documentation>
+						</xs:annotation>
+					  <xs:complexType>
+						<xs:attribute ex:importance="expert" ex:unit="" name="number" type="xs:integer"
+							default="0">
+							<xs:annotation>
+								<xs:documentation> Specifies the number of the shell to be ionized. For instance,
+								a number equal to 1 will ionize the first shell, a number equal to 2, the second, and so on.
+								The default value of 0 corresponds to the last shell specified in the species file.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute ex:importance="expert" ex:unit="Bohr" name="ionization" type="fortrandouble"
+							default="0.5d0">
+							<xs:annotation>
+								<xs:documentation> Specifies the degree of ionization.
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					  </xs:complexType>
+					</xs:element>
+				 </xs:sequence>
+				 <xs:attribute ex:importance="expert" ex:unit="" name="ampl" type="fortrandouble"
+					default="1.00">
+					<xs:annotation>
+						<xs:documentation> Specifies the amplitude of the self-energy potential.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute ex:importance="expert" ex:unit="" name="exponent" type="xs:integer"
+					default="8">
+					<xs:annotation>
+						<xs:documentation> Specifies the exponent <inlinemath>n</inlinemath> of the cutoff-function
+							(for the self-energy potential)
+							<displaymath>
+							  \Theta (r) = A\left[1-\left(\frac{r}{r_{\rm cut}} \right)^{\!\!n} \right]^3
+							  \nonumber
+							</displaymath>
+							for <inlinemath>r \le r_{\rm cut}</inlinemath>.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute ex:importance="expert" ex:unit="Bohr" name="cut" type="fortrandouble"
+					default="0.0d0">
+					<xs:annotation>
+						<xs:documentation> Specifies the value of <inlinemath>r_{\rm cut}</inlinemath> (in Bohrs) 
+							for the self-energy potential, which determines the range of the correction. 
+							Note that this can/should be specified for each species.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+                </xs:complexType>  
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute ex:importance="essential" ex:unit="" name="speciesfile" type="xs:anyURI"
+              use="required">
+              <xs:annotation>
+                <xs:documentation> Defines the file that contains the species definition. It is
+                  looked up in the species directory specified by  <attref>speciespath</attref>. By default, the
+                  name of the file is <it>element</it>.<pre>xml</pre>, <it>e.g.</it>, <pre>Ag.xml</pre>. </xs:documentation>
+                <xs:appinfo>
+                  <oldname>spfname</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="output" ex:unit="" name="chemicalSymbol" type="xs:string"
+              use="optional" default="">
+              <xs:annotation>
+                <xs:documentation> Optional attribute that may be used in visualization and by
+                  converters. It is ignored by <exciting>exciting</exciting>.
+                </xs:documentation>
+                <xs:appinfo>
+                  <oldname>spsymb</oldname>
+                </xs:appinfo>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="output" ex:unit="" name="atomicNumber" type="xs:integer"
+              use="optional">
+              <xs:annotation>
+                <xs:documentation> Optional attribute that may be used in visualization and by
+                  converters. It is not used in <exciting>exciting</exciting>.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ex:importance="expert" ex:unit="Bohr" name="rmt" type="fortrandouble"
+              default="-1.0d0" use="optional">
+              <xs:annotation>
+                <xs:appinfo>
+                  <oldname>noreplace&gt;</oldname>
+                </xs:appinfo>
+                <xs:documentation> Defines the muffin-tin radius. This optional parameter allows to
+                  override the value either specified in the species file or generated by automatic determination.
+                   The muffin-tin radius defines
+                  the region around the atomic nucleus where the wave function is expanded in terms
+                  of atomic-like functions. In contrast, the interstitial region, <it>i.e.</it>, the 
+                  region not belonging to any muffin-tin sphere, is described by planewaves.
+                 </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+           
+
+          </xs:complexType>
+        </xs:element>
+         <xs:element ex:importance="ignore" ex:unit="" name="symmetries" maxOccurs="1" minOccurs="0">
+         <xs:annotation>
+         <xs:appinfo>
+         
+         </xs:appinfo>
+         </xs:annotation>
+         </xs:element>
+         
+            </xs:sequence>
+      <xs:attribute ex:importance="essential" ex:unit="" name="speciespath" type="xs:anyURI"
+        use="required">
+        <xs:annotation>
+          <xs:documentation> The path to the directory containing the species files. Alternatively,
+            it can be defined as an HTTP URL, in this case the <a
+              href="http://exciting-code.org/wget"> wget </a> utility must be installed. </xs:documentation>
+          <xs:appinfo>
+            <oldname>sppath</oldname>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:attribute>
+<!-- Giulio Biddau 1.11.2012-->
+      <xs:attribute ex:importance="expert" ex:unit="" name="cartesian" type="xs:boolean" default="false">
+        <xs:annotation>
+          <xs:documentation> 
+	  If <pre>"true"</pre> the input atomic positions are given in cartesian coordinates.
+	  </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+<!-- Giulio Biddau 1.11.2012-->
+      <xs:attribute ex:importance="expert" ex:unit="" name="rmtapm" type="vect2d"
+        default="0.25d0 0.95d0">
+        <xs:annotation>
+          <xs:documentation> This attribute assigns the two parameters governing the automatic
+            generation of the muffin-tin radii. When the attribute <attref>autormt</attref> is set
+            to <pre>"true"</pre>, the muffin-tin radii are determined according to the following
+            expression <displaymath>R_i\propto 1+\zeta|Z_i|^{1/3}, </displaymath> where
+              <inlinemath>Z_i</inlinemath> is the atomic number of the <inlinemath>i</inlinemath> th
+            species, <inlinemath>\zeta</inlinemath> is stored in <attref>rmtapm</attref>(1). The
+            distance between the muffin-tin speheres is determined by the value of
+              <attref>rmtapm</attref>(2): When <attref>rmtapm</attref>(2)=1, the closest muffin-tin
+            spheres will touch each other. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="Bohr" name="epslat" type="fortrandouble"
+        default="1.0d-6">
+        <xs:annotation>
+          <xs:documentation>This attribute defines the accuracy up to which two vectors can be
+            considered numerically identical. Vectors with lengths less than this are considered
+            zero.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="autormt" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> If <pre>"true"</pre>, the muffin-tin radius of each species is
+            automatically set according to the variables specified by the attribute
+              <attref>rmtapm</attref>. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="primcell" type="xs:boolean"
+        default="false">
+        <xs:annotation>
+          <xs:documentation> If <pre>"true"</pre>, the primitive unit cell is determined
+            automatically from the conventional cell defined by the basis vectors given by the
+              <elementref>basevect</elementref> elements. The primitive unit cell is determined by
+            searching for lattice vectors among all vectors connecting atomic sites and choosing the
+            three shortest ones which produce a unit cell with non-zero volume. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ex:importance="expert" ex:unit="" name="tshift" type="xs:boolean" default="true">
+        <xs:annotation>
+          <xs:documentation> If <pre>"true"</pre>,  the crystal is shifted such that
+            the atom closest to the origin is exactly at the origin. </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

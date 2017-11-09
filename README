@@ -1,0 +1,64 @@
+                     +-----------------------------------+
+                     |     The EXCITING FP-LAPW Code     |
+                     +-----------------------------------+
+
+Copyright (C) 2002-2013 The exciting Team.
+This code is distributed under the terms of the GNU General Public License.
+See the file COPYING for license details. 
+
+    EXCITING is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    EXCITING is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with EXCITING; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+
+Other Licenses
+	
+	The code is packaged with libraries that are distributed under different
+	licenses then the GPL. They are:
+	
+	FoX XML library (BSD like license)
+	http://www.uszla.me.uk/FoX/DoX/Licensing.html
+	
+	BLAS LAPACK
+	http://www.netlib.org/lapack/LICENSE
+	
+	ARPACK
+	http://www.caam.rice.edu/software/ARPACK/RiceBSD.txt#LICENSE
+	
+	LIBXC (GPL 3.0)
+	http://www.tddft.org/programs/octopus/wiki/index.php/Libxc
+
+
+Compile
+	The code can be compiled  by running 
+	
+	make
+	
+	in this directory. The first time this will start a setup script. After choosing the
+ 	platform you will be asked wether you want to build a k-point parallel version using
+	MPI and a version that uses multithreaded BLAS/LAPACK. Choose yes or no dependent on
+	if you have the required libraries installed on your system. You can manually edit
+	the make.inc in the build directory.
+	
+	The auxiliary programs include "spacegroup" for producing crystal geometries
+	from spacegroup data, "species" for generating species files, and "eos" for
+	fitting equations of state to energy-volume data.
+	
+	EXCITING is updated regularly with new features and bug fixes. This release may
+	be used for limited production but please check the consistency of the results
+	carefully.
+	
+	--------------------------------------------------------------------------------
+	
+	
+	http://exciting-code.org
+	

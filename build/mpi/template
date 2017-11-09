@@ -1,0 +1,10 @@
+include ../make.inc
+include ../libraries.inc
+FC = $(MPIF90) 
+### default
+FFLAGS = $(MPIF90_OPTS) -Ifinclude
+### debug
+LD = $(FC)
+LDFLAGS =$(MPI_OPTS) $(LIBS) $(INTERNALLIBS)
+TMPFILES = *.mod
+SUFFIX=mpi
