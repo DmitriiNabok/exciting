@@ -1,10 +1,13 @@
+module m_wsweight
+    implicit none
+    contains
 !
 !BOP
 ! !ROUTINE: ws_weight
 ! !INTERFACE:
 !
 !
-Subroutine ws_weight (vrl, vrsl, vpl, zwght)
+Subroutine ws_weight (vrl, vrsl, vpl, zwght, kgrid)
 ! !INPUT/OUTPUT PARAMETERS:
 !   vrl   : R vector in lattice coordinates (in,real(3))
 !   vrsl  : R+s vector (vector from atom 1 in cell at origin to atom 2 in
@@ -30,14 +33,19 @@ Subroutine ws_weight (vrl, vrsl, vpl, zwght)
       Real(8), Intent(In) :: vrsl(3)
       Real(8), Intent(In) :: vpl(3)
       Complex(8), Intent(Out) :: zwght
+      logical, intent( in), optional :: kgrid
 ! local variables
-      Integer :: i1, i2, i3, j1, j2, j3, n
+      Integer :: i1, i2, i3, j1, j2, j3, n, ngrid_(3)
       Real(8) :: v0(3), v1(3), v2(3), v3(3), t1, t2, t3
       Real(8) :: vrssl(3), vsl(3), vr2l(3), vrs2l(3)
       Integer :: ivrl(3)
+      ngrid_ = ngridq
+      if( present( kgrid)) then
+        if( kgrid) ngrid_ = input%groundstate%ngridk
+      end if
       vsl(:) = vrsl(:) - vrl(:)
 ! vrssl is vector to atom s in cell R; referring to supercell
-      vrssl(:) = vrsl(:) / dble(ngridq(:))
+      vrssl(:) = vrsl(:) / dble(ngrid_(:))
 ! map vector to [0,1) interval
       Call r3frac (input%structure%epslat, vrssl, ivrl)
 ! convert to cartesian and shift by lattice vectors to obtain shortest possible vector
@@ -74,7 +82,7 @@ Subroutine ws_weight (vrl, vrsl, vpl, zwght)
                   n = n + 1
 ! convert to lattice coords of original unit cell and consider R part only
                   Call r3mv (ainv, v3, vrssl)
-                  vrs2l(:) = vrssl(:)*dble(ngridq(:))
+                  vrs2l(:) = vrssl(:)*dble(ngrid_(:))
                   vr2l(:) = vrs2l(:) - vsl(:)
                   t3 = -twopi*(vpl(1)*vr2l(1) + vpl(2)*vr2l(2) &
                            & + vpl(3)*vr2l(3))
@@ -84,8 +92,10 @@ Subroutine ws_weight (vrl, vrsl, vpl, zwght)
             End Do
          End Do
       End Do
+      call r3mv( ainv, v0, v1)
 ! divide by number of equivalent vectors
       zwght = zwght / dble(n)
       Return
-End Subroutine
+End Subroutine ws_weight
 !EOC
+end module m_wsweight
